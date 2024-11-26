@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const thermalPrinter = require('node-thermal-printer');
 const pedidoSchema = new mongoose.Schema({
   cliente: {
     nome: { type: String, required: true },
@@ -80,6 +80,28 @@ class PedidoRepository {
       throw new Error('Erro ao encontrar pedidos pelo telefone: ' + err.message);
     }
   }
+
+  async imprimir(textoimpresso) {
+    const printer = new thermalPrinter.printer();
+    printer.setPrinterIndex(0);
+    printer.setType(thermalPrinter.types.EPSON);
+    printer.setOptions({
+      width: 48,
+      encoding: 'GB18030',
+    });
+
+    printer.alignCenter();
+    printer.println(textoimpresso);
+    
+    try {
+      await printer.execute();
+      console.log("Pedido impresso com sucesso!");
+    } catch (error) {
+      console.error("Erro ao imprimir:", error);
+      throw new Error("Erro ao imprimir pedido");
+    }
+  }
+
 
   // Atualizar o status de um pedido
   async atualizarStatus(pedidoId, novoStatus) {

@@ -5,7 +5,8 @@ const AtualizarStatusPedidoUseCase = require('../../../application/use-cases/Atu
 const CancelarPedidoUseCase = require('../../../application/use-cases/CancelarPedidoUseCase');
 const EncontrarTodosPedidosUseCase = require('../../../application/use-cases/EncontrarTodosPedidosUseCase');
 const DeletePedidoUseCase = require('../../../application/use-cases/DeletePedidoUseCase');
-
+const Pedido = require('../../../domain/entities/Pedido');
+const ImprimirPedidoUseCase = require('../../../application/use-cases/imprimirPedidoUseCase');
 class PedidoController {
   // Criar pedido
    async criarPedido(req, res) {
@@ -101,6 +102,22 @@ async DeletarPedido(req, res) {
     res.status(400).json({ erro: err.message });
   }
 }
+
+async imprimirPedidoController (req, res) {
+
+  try {
+    const {pedidoData} = req.body;
+    console.log(pedidoData)
+    const pedidoimprido = new ImprimirPedidoUseCase();
+    const pedidoimpresso = await pedidoimprido.executar(pedidoData);
+    res.status(200).send(pedidoimpresso);
+  } catch (error) {
+    console.error("Erro ao imprimir:", error);
+    res.status(500).send("Erro ao imprimir pedido");
+  }
+};
+
+
 }
 
 module.exports = new PedidoController();

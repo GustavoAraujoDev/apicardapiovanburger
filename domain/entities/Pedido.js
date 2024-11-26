@@ -59,6 +59,38 @@ class Pedido {
     this.rastreamento = rastreamento;
     this.dataPedido = dataPedido;
   }
+
+// Método para formatar o pedido para impressão
+formatarParaImpressao() {
+  try {
+    let texto = `Pedido #${this.dataPedido.toISOString()}\n`;
+  texto += `Cliente: ${this.cliente.nome}\n`;
+  texto += `Telefone: ${this.cliente.telefone}\n`;
+  texto += "Itens:\n";
+  this.itens.forEach(item => {
+    texto += `${item.Quantity} x ${item.name} (${item.category}) - R$ ${item.price.toFixed(2)}\n`;
+  });
+  texto += `Total: R$ ${this.pagamento.valorTotal.toFixed(2)}\n`;
+  texto += `Forma de pagamento: ${this.pagamento.forma}\n`;
+
+  // Detalhes de entrega
+  if (this.modoEntrega === 'entrega em casa') {
+    texto += `Horário estimado de entrega: ${this.horarioEntrega.toLocaleString()}\n`;
+    texto += `Rastreamento: ${this.rastreamento.statusRastreamento} (${this.rastreamento.codigoRastreamento || 'N/A'})\n`;
+  } else if (this.modoEntrega === 'consumo no local') {
+    texto += `Mesa: ${this.mesa}\n`;
+  }
+
+  texto += `Data do pedido: ${this.dataPedido.toLocaleString()}\n`;
+  texto += "Obrigado pela compra!";
+  return texto;
+  } catch (err) {
+    console.error('Erro ao formate pedido: ' + err.message )
+    throw new Error('Erro ao formate pedido: ' + err.message);
+  }
+  
+}
+
 }
 
 module.exports = Pedido;

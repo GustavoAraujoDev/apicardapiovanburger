@@ -5,6 +5,7 @@ const router = express.Router();
 
 // Rotas para pedidos
 router.post('/', PedidoController.criarPedido);
+router.post('/imprimir', PedidoController.imprimirPedidoController);
 router.get('/:id', PedidoController.encontrarPedidoPorId);
 router.get('/telefone/:telefone', PedidoController.encontrarPedidosPorTelefone);
 router.get('/', PedidoController.encontrarTodosPedido);
