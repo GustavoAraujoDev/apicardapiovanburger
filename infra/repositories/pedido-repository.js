@@ -14,7 +14,8 @@ const pedidoSchema = new mongoose.Schema({
     description: { type: String, required: false }, // Descrição detalhada (opcional)
     Quantity: { type: Number, required: true },
     price: { type: Number, required: true }, // Preço por unidade
-    extras: [{ type: String, required: false }] // Ingredientes ou complementos adicionais
+    extras: [{ type: String, required: false }], // Ingredientes ou complementos adicionais
+    observacao: { type: String, required: false }, 
   }],
   pagamento: {
     forma: { type: String, required: true, enum: ['dinheiro', 'cartão', 'PIX', 'transferência', 'vale-presente'] },
@@ -82,25 +83,38 @@ class PedidoRepository {
   }
 
   async imprimir(textoimpresso) {
-    const printer = new thermalPrinter.printer();
-    printer.setPrinterIndex(0);
-    printer.setType(thermalPrinter.types.EPSON);
-    printer.setOptions({
-      width: 48,
-      encoding: 'GB18030',
-    });
-
-    printer.alignCenter();
-    printer.println(textoimpresso);
-    
     try {
+      const printer = new thermalPrinter.printer();
+      // Verifica se a impressora está configurada
+      const isPrinterConfigured = printer.isPrinterConfigured();
+      const isConnected = await printer.isPrinterConnected();
+       // Verifica a conexão com a impressora
+      if (!isPrinterConfigured) {
+        return { status: "warning", message: "Impressora não configurada" };
+      }
+      if (!isConnected) {
+        return { status: "warning", message: "Impressora não conectada" };
+      }
+      printer.setPrinterIndex(0);
+      printer.setType(thermalPrinter.types.EPSON);
+      printer.setOptions({
+        width: 48,
+        encoding: 'GB18030',
+      });
+  
+      // Configuração e execução da impressão
+      printer.alignCenter();
+      printer.println(textoimpresso);
+  
       await printer.execute();
-      console.log("Pedido impresso com sucesso!");
+      return { status: "success", message: "Pedido impresso com sucesso" };
+  
     } catch (error) {
-      console.error("Erro ao imprimir:", error);
-      throw new Error("Erro ao imprimir pedido");
+      console.error("Erro ao tentar imprimir:", error.message);
+      return { status: "error", message: "Erro ao tentar imprimir", error: error.message };
     }
   }
+  
 
 
   // Atualizar o status de um pedido

@@ -104,10 +104,8 @@ async DeletarPedido(req, res) {
 }
 
 async imprimirPedidoController (req, res) {
-
+  const pedidoData = req.body;
   try {
-    const {pedidoData} = req.body;
-    console.log(pedidoData)
     const pedidoimprido = new ImprimirPedidoUseCase();
     const pedidoimpresso = await pedidoimprido.executar(pedidoData);
     res.status(200).send(pedidoimpresso);

@@ -63,7 +63,7 @@ class Pedido {
 // Método para formatar o pedido para impressão
 formatarParaImpressao() {
   try {
-    let texto = `Pedido #${this.dataPedido.toISOString()}\n`;
+    let texto = `Pedido #${this.dataPedido}\n`;
   texto += `Cliente: ${this.cliente.nome}\n`;
   texto += `Telefone: ${this.cliente.telefone}\n`;
   texto += "Itens:\n";
