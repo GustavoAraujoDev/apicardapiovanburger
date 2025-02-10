@@ -4,6 +4,7 @@ const findById = require("../../../application/use-cases/get-product-by-id");
 const DeleteProduct = require("../../../application/use-cases/delete-product");
 class ProductController {
   async create(req, res) {
+    console.log(req.body);
     try {
       const createProduct = new CreateProduct();
       const product = await createProduct.execute(req.body);
