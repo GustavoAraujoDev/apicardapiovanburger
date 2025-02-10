@@ -1,6 +1,6 @@
 class Product {
-  constructor({ name, description, price, images = [], category }) {
-    if (!name || !description || !price || !images || !category) {
+  constructor({ name, description, price, images = [], category, colors = [], tamanhos = [] }) {
+    if (!name || !description || !price || !images || !category || !colors || !tamanhos) {
       throw new Error("All fields are required");
     }
 
@@ -9,6 +9,8 @@ class Product {
     this.price = price;
     this.images = images;
     this.category = category;
+    this.colors = colors;
+    this.tamanhos = tamanhos;
   }
 }
 
