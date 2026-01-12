@@ -10,17 +10,9 @@ const options = {
       description: 'Documentação automática via JSDoc'
     },
     servers: [
-      { url: 'https://apicardapiovanburger.onrender.com', description: 'Local' }
+      { url: 'https://apicardapiovanburger.onrender.com', description: 'Produção' }
     ],
-    components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT'
-        }
-      }
-    }
+    //em imprementaçao o restante
   },
  apis: ['./interfaces/http/routes/**/*.js']
 }
