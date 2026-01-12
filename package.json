@@ -4,22 +4,35 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "test": "jest --runInBand",
+    "test:unit": "jest tests/unit",
+    "test:integration": "jest tests/integration",
+    "test:e2e": "jest tests/e2e",
+    "docs": "jsdoc -c jsdoc.json"
   },
   "keywords": [],
   "author": "Ives van Hoorne",
   "license": "MIT",
   "devDependencies": {
+    "clean-jsdoc-theme": "^4.3.0",
     "eslint": "9.15.0",
-    "nodemon": "^3.1.7"
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.7",
+    "supertest": "^7.1.4"
   },
   "dependencies": {
+    "@testcontainers/mongodb": "^11.10.0",
     "body-parser": "1.20.3",
     "cors": "2.8.5",
+    "docker": "^1.0.0",
     "dotenv": "16.4.5",
     "express": "4.21.1",
     "fs": "^0.0.1-security",
+    "jsdoc": "^4.0.5",
     "mongoose": "8.8.1",
-    "node-thermal-printer": "^4.4.3"
+    "node-thermal-printer": "^4.4.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   }
 }

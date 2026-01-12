@@ -1,5 +1,7 @@
+/** @type {*} */
 const mongoose = require("mongoose");
 
+/** @type {*} */
 const ProductSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
@@ -10,28 +12,72 @@ const ProductSchema = new mongoose.Schema({
   tamanhos: [{type: String, required: true }],
 });
 
+/** @type {*} */
 const ProductModel = mongoose.model("Product", ProductSchema);
 
+/**
+ *
+ *
+ * @class ProductRepository
+ */
 class ProductRepository {
+  /**
+   *
+   *
+   * @param {*} productData
+   * @return {*} 
+   * @memberof ProductRepository
+   */
   async create(productData) {
     return await ProductModel.create(productData);
   }
 
+  /**
+   *
+   *
+   * @return {*} 
+   * @memberof ProductRepository
+   */
   async findAll() {
     return await ProductModel.find();
   }
 
+  /**
+   *
+   *
+   * @param {*} id
+   * @return {*} 
+   * @memberof ProductRepository
+   */
   async findById(id) {
     return await ProductModel.findById(id);
   }
 
+  /**
+   *
+   *
+   * @param {*} id
+   * @param {*} productData
+   * @return {*} 
+   * @memberof ProductRepository
+   */
   async update(id, productData) {
     return await ProductModel.findByIdAndUpdate(id, productData, { new: true });
   }
 
+  /**
+   *
+   *
+   * @param {*} id
+   * @return {*} 
+   * @memberof ProductRepository
+   */
   async delete(id) {
     return await ProductModel.findByIdAndDelete(id);
   }
 }
 
-module.exports = new ProductRepository();
+module.exports = {
+  productRepository: new ProductRepository(),
+  ProductModel
+}
