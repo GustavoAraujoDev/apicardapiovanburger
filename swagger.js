@@ -5,12 +5,12 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Minha API',
+      title: 'Gestao Pro',
       version: '1.0.0',
       description: 'Documentação automática via JSDoc'
     },
     servers: [
-      { url: 'http://localhost:3000', description: 'Local' }
+      { url: 'https://apicardapiovanburger.onrender.com', description: 'Local' }
     ],
     components: {
       securitySchemes: {
