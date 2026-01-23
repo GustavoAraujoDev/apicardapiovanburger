@@ -6,12 +6,14 @@ const CancelarPedidoUseCase = require('../../../application/use-cases/CancelarPe
 const EncontrarTodosPedidosUseCase = require('../../../application/use-cases/EncontrarTodosPedidosUseCase');
 const DeletePedidoUseCase = require('../../../application/use-cases/DeletePedidoUseCase');
 const Pedido = require('../../../domain/entities/Pedido');
+const PedidoRepositoryMongo = require("../../../infra/repositories/pedidoRepositoryMongo");
 const ImprimirPedidoUseCase = require('../../../application/use-cases/imprimirPedidoUseCase');
+const repo = new PedidoRepositoryMongo();
 class PedidoController {
   // Criar pedido
    async criarPedido(req, res) {
     try {
-      const createpedido = new CriarPedidoUseCase();
+      const createpedido = new CriarPedidoUseCase(repo);
       const pedidoData = req.body;
       const novoPedido = await createpedido.executar(pedidoData);
       res.status(201).json(novoPedido);
@@ -24,7 +26,7 @@ class PedidoController {
    async encontrarPedidoPorId(req, res) {
     try {
       const { id } = req.params;
-      const buscarpedidoPorId = new EncontrarPedidoPorIdUseCase();
+      const buscarpedidoPorId = new EncontrarPedidoPorIdUseCase(repo);
       const pedido = await buscarpedidoPorId.executar(id);
       res.status(200).json(pedido);
     } catch (err) {
@@ -34,7 +36,7 @@ class PedidoController {
   // Encontrar pedido por ID
   async encontrarTodosPedido(req, res) {
     try {
-      const buscarTodosPedido = new EncontrarTodosPedidosUseCase();
+      const buscarTodosPedido = new EncontrarTodosPedidosUseCase(repo);
       const pedidos = await buscarTodosPedido.executar();
       res.status(200).json(pedidos);
     } catch (err) {
@@ -46,7 +48,7 @@ class PedidoController {
    async encontrarPedidosPorTelefone(req, res) {
     try {
       const telefone  = req.params.telefone;
-      const buscarpedidoPorTelefone = new EncontrarPedidosPorTelefoneUseCase();
+      const buscarpedidoPorTelefone = new EncontrarPedidosPorTelefoneUseCase(repo);
       const pedidos = await buscarpedidoPorTelefone.executar(telefone);
       res.status(200).json(pedidos);
     } catch (err) {
@@ -59,7 +61,7 @@ class PedidoController {
     try {
       const { pedidoId } = req.params;
       const { status } = req.body;
-      const atualizarPedido = new AtualizarStatusPedidoUseCase();
+      const atualizarPedido = new AtualizarStatusPedidoUseCase(repo);
       const pedidoAtualizado = await atualizarPedido.executar(pedidoId, status);
       res.status(200).json(pedidoAtualizado);
     } catch (err) {
@@ -71,7 +73,7 @@ class PedidoController {
    async cancelarPedido(req, res) {
     try {
       const { pedidoId } = req.params;
-      const cancelarpedido = new CancelarPedidoUseCase();
+      const cancelarpedido = new CancelarPedidoUseCase(repo);
       const pedidoCancelado = await cancelarpedido.executar(pedidoId);
       res.status(200).json(pedidoCancelado);
     } catch (err) {
@@ -83,7 +85,7 @@ class PedidoController {
    async cancelarPedido(req, res) {
     try {
       const { pedidoId } = req.params;
-      const cancelarpedido = new CancelarPedidoUseCase();
+      const cancelarpedido = new CancelarPedidoUseCase(repo);
       const pedidoCancelado = await cancelarpedido.executar(pedidoId);
       res.status(200).json(pedidoCancelado);
     } catch (err) {
@@ -95,7 +97,7 @@ class PedidoController {
 async DeletarPedido(req, res) {
   try {
     const { pedidoId } = req.params;
-    const deletarpedido = new DeletePedidoUseCase();
+    const deletarpedido = new DeletePedidoUseCase(repo);
     const pedidodeletado = await deletarpedido.executar(pedidoId);
     res.status(200).json(pedidodeletado);
   } catch (err) {
@@ -106,7 +108,7 @@ async DeletarPedido(req, res) {
 async imprimirPedidoController (req, res) {
   const pedidoData = req.body;
   try {
-    const pedidoimprido = new ImprimirPedidoUseCase();
+    const pedidoimprido = new ImprimirPedidoUseCase(repo);
     const pedidoimpresso = await pedidoimprido.executar(pedidoData);
     res.status(200).send(pedidoimpresso);
   } catch (error) {

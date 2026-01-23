@@ -1,7 +1,9 @@
 const Pedido = require("../../domain/entities/Pedido");
-const PedidoRepository = require("../../infra/repositories/pedido-repository");
 
 class ImprimirPedidoUseCase {
+  constructor(pedidoRepo){
+    this.pedidoRepo = pedidoRepo;
+  }
   async executar(pedidoData) {
     try {
       // Criando a instância do Pedido
@@ -10,7 +12,7 @@ class ImprimirPedidoUseCase {
       // Formatando para impressão
       const textoParaImpressao = pedido.formatarParaImpressao();
       // Chamando o repositório para imprimir
-      const textoimpresso = await PedidoRepository.imprimir(textoParaImpressao);
+      const textoimpresso = await this.pedidoRepo.imprimir(textoParaImpressao);
 
       return textoimpresso;
     } catch (err) {

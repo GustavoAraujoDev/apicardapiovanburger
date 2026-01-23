@@ -1,9 +1,11 @@
-const PedidoRepository = require('../../infra/repositories/pedido-repository');
 
 class EncontrarPedidoPorIdUseCase {
+  constructor(pedidoRepo){
+    this.pedidoRepo = pedidoRepo;
+  }
   async executar(pedidoId) {
     try {
-      const pedido = await PedidoRepository.encontrarPorId(pedidoId);
+      const pedido = await this.pedidoRepo.encontrarPorId(pedidoId);
       return pedido;
     } catch (err) {
       throw new Error('Erro ao encontrar pedido: ' + err.message);

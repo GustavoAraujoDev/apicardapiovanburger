@@ -1,10 +1,14 @@
 const Product = require("../../domain/entities/product");
-const { productRepository } = require("../../infra/repositories/product-repository");
-
+const ProductValidator = require("../../domain/entities/productvalidator")
 class CreateProduct {
+  constructor(productRepo){
+    this.productRepo = productRepo;
+  }
+
   async execute(productData) {
     const product = new Product(productData);
-    return await productRepository.create(product);
+    ProductValidator.validate(product);
+    return await this.productRepo.create(product);
   }
 }
 

@@ -1,3 +1,4 @@
+const ProductRepository = require("../../domain/entities/productReposity")
 /** @type {*} */
 const mongoose = require("mongoose");
 
@@ -20,7 +21,7 @@ const ProductModel = mongoose.model("Product", ProductSchema);
  *
  * @class ProductRepository
  */
-class ProductRepository {
+class ProductRepository extends ProductRepository {
   /**
    *
    *

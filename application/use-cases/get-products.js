@@ -1,9 +1,10 @@
 const Product = require("../../domain/entities/product");
-const { productRepository } = require("../../infra/repositories/product-repository");
-
 class GetProducts {
+    constructor(productRepo){
+    this.productRepo = productRepo;
+  }
   async execute() {
-    return await productRepository.findAll();
+    return await this.productRepo.findAll();
   }
 }
 

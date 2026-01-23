@@ -1,9 +1,12 @@
 const Product = require("../../domain/entities/product");
-const { productRepository } = require("../../infra/repositories/product-repository");
+
 
 class DeleteProducts {
+  constructor(productRepo) {
+    this.productRepo = productRepo;
+  }
   async execute(id) {
-    return await productRepository.delete(id);
+    return await this.productRepo.delete(id);
   }
 }
 
