@@ -1,4 +1,4 @@
-export class LoginUserUseCase {
+ class LoginUserUseCase {
   constructor(
     private readonly userRepo: any,
     private readonly passwordHasher: any,
@@ -36,3 +36,5 @@ export class LoginUserUseCase {
     };
   }
 }
+
+module.exports =  LoginUserUseCase;
