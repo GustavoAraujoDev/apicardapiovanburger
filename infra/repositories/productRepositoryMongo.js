@@ -54,6 +54,10 @@ class ProductRepository extends ProductRepository {
     return await ProductModel.findById(id);
   }
 
+  async findByEmail(email) {
+    return await ProductModel.findOne({ email });
+  }
+
   /**
    *
    *

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const thermalPrinter = require("node-thermal-printer").printer;
 const fs = require("fs").promises;
+const PedidoRepository = require("../../domain/entities/pedidoRepository")
 const PrinterTypes = require("node-thermal-printer").types;
 const pedidoSchema = new mongoose.Schema({
   cliente: {
@@ -80,7 +81,7 @@ const pedidoSchema = new mongoose.Schema({
 const PedidoModel =
   mongoose.models.Pedido || mongoose.model("Pedido", pedidoSchema);
 
-class PedidoRepository {
+class PedidoRepositoryMongo extends PedidoRepository{
   // Criar um novo pedido
   async criarPedido(pedidoData) {
     try {
@@ -243,4 +244,4 @@ class PedidoRepository {
   }
 }
 
-module.exports = new PedidoRepository();
+module.exports = new PedidoRepositoryMongo();
