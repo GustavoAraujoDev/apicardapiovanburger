@@ -1,7 +1,7 @@
 const cors = require("cors");
 const corsWhiteList = require("../../../shared/config/cors.config");
 
-export function corsMiddleware() {
+ function corsMiddleware() {
     const env = process.env.NODE_ENV || "development";
     const allowedOrigins = corsWhiteList(env) || [];
 
@@ -45,3 +45,5 @@ export function corsMiddleware() {
         optionsSuccessStatus: 204
     });
 }
+
+module.exports = corsMiddleware;
