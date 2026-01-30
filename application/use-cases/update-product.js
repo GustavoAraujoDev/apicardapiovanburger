@@ -4,9 +4,9 @@ class Productsupdate {
     constructor(productRepo){
     this.productRepo = productRepo;
   }
-  async execute(id) {
-    return await this.productRepo.update(id);
+  async execute(id, productData) {
+    return await this.productRepo.update(id, productData);
   }
 }
 
-module.exports = GetProductsfindById;
+module.exports = Productsupdate;

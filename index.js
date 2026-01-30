@@ -17,7 +17,7 @@ require("dotenv").config();
 const { swaggerUi, swaggerSpec } = require('./swagger');
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors = require("cors");
+const corsMiddleware = require("../apicardapiovanburger/interfaces/http/middlewares/cors.middleware")
 
 const productRoutes = require("./interfaces/http/routes/product-routes");
 const pedidoRoutes = require("./interfaces/http/routes/pedido-routes");
@@ -43,7 +43,7 @@ app.use(bodyParser.json());
 /**
  * Middleware responsável por permitir requisições CORS.
  */
-app.use(cors());
+app.use(corsMiddleware());
 
 /**
  * =========================

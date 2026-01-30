@@ -1,8 +1,11 @@
 const express = require("express");
 const ProductController = require("../controllers/product-controller");
+const validateRequest = require("../middlewares/validateRequest");
+const ProductValidator = require("../../../application/validators/productValidator");
 
 const router = express.Router();
 
+<<<<<<< HEAD
 /**
  * @swagger
  * tags:
@@ -53,6 +56,9 @@ router.post("/", ProductController.create);
  *       200:
  *         description: Lista de produtos retornada com sucesso
  */
+=======
+router.post("/", validateRequest(ProductValidator.Create), ProductController.create);
+>>>>>>> c46a330 ("versao 1.0")
 router.get("/", ProductController.getAll);
 
 /**
@@ -94,5 +100,10 @@ router.get("/:id", ProductController.findById);
  *         description: Produto não encontrado
  */
 router.delete("/:id", ProductController.delete);
+<<<<<<< HEAD
+=======
+router.update("/:id", validateRequest(ProductValidator.update), ProductController.update)
+// Rota para update, delete e getById.
+>>>>>>> c46a330 ("versao 1.0")
 
 module.exports = router;
