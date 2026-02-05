@@ -21,7 +21,7 @@ const ProductModel = mongoose.model("Product", ProductSchema);
  *
  * @class ProductRepository
  */
-class ProductRepository extends ProductRepository {
+class ProductRepositoryMongo extends ProductRepository {
   /**
    *
    *
@@ -83,6 +83,6 @@ class ProductRepository extends ProductRepository {
 }
 
 module.exports = {
-  productRepository: new ProductRepository(),
+  ProductRepositoryMongo: ProductRepositoryMongo,
   ProductModel
 }
