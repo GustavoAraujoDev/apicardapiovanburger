@@ -1,7 +1,5 @@
-import{ JwtService } from "../../../interfaces/http/auth/JwtService";
-
-export function AuthMiddleware(jwtService: JwtService) {
-  return (req: any, res: any, next: any) => {
+function AuthMiddleware(jwtService) {
+  return (req, res, next) => {
     const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) return res.status(401).end();
@@ -20,3 +18,5 @@ export function AuthMiddleware(jwtService: JwtService) {
     }
   };
 }
+
+module.exports = AuthMiddleware;

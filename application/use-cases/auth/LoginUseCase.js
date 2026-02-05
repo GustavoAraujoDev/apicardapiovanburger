@@ -1,11 +1,11 @@
-export class LoginUserUseCase {
-  constructor(
-    private readonly userRepo: any,
-    private readonly passwordHasher: any,
-    private readonly tokenService: any
-  ) {}
+class LoginUserUseCase {
+  constructor(userRepo, passwordHasher, tokenService) {
+    this.userRepo = userRepo,
+    this.passwordHasher = passwordHasher,
+    this.tokenService = tokenService
+  }
 
-  async execute(email: string, password: string) {
+  async execute(email, password) {
     const user = await this.userRepo.findByEmail(email);
 
     if (!user || !user.canLogin()) {
@@ -36,3 +36,5 @@ export class LoginUserUseCase {
     };
   }
 }
+
+module.exports = LoginUserUseCase;
