@@ -3,7 +3,8 @@ const corsWhiteList = require("../../../shared/config/cors.config");
 
  function corsMiddleware() {
     const env = process.env.NODE_ENV || "development";
-    const allowedOrigins = corsWhiteList(env) || [];
+    const getCorsWhiteList = (env) => corsWhiteList[env];
+    const allowedOrigins = getCorsWhiteList(env) || [];
 
     return cors({
         origin(origin, callback){

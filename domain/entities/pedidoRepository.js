@@ -27,3 +27,5 @@ class PedidoRepository {
   // Cancelar um pedido (alterando o status para 'cancelado')
   cancelarPedido(pedidoId) {}
 }
+
+module.exports = PedidoRepository;

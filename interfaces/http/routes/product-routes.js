@@ -43,7 +43,7 @@ router.post("/auth/registrar", (req, res) =>
 /* =========================
    MIDDLEWARE DE AUTENTICAÇÃO
 ========================= */
-router.use(AuthMiddleware(new JwtService()));
+router.use(AuthMiddleware(JwtService));
 
 /* =========================
    ROTAS PROTEGIDAS

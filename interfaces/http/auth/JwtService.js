@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const User = require("../../../domain/entities/user");
 const TokenService = require("../../../application/use-cases/services/TokenService");
+const { urlencoded } = require("body-parser");
 
-export class JwtService extends TokenService {
+class JwtService extends TokenService {
   generateAccessToken(user) {
     return jwt.sign(
       {
@@ -34,3 +35,5 @@ export class JwtService extends TokenService {
     );
   }
 }
+
+module.exports = JwtService;

@@ -1,4 +1,4 @@
-export const corsWhiteList = {
+const corsWhiteList = {
     development: [
       "http://localhost:3000"
     ],
@@ -9,3 +9,5 @@ export const corsWhiteList = {
       "https://meuapp.com"
     ]
 };
+
+module.exports = corsWhiteList;

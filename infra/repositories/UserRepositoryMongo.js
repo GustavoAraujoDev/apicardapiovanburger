@@ -1,4 +1,4 @@
-const UserRepository = require("../../../domain/entities/UserRepository");
+const UserRepository = require("../../domain/entities/UserRepository");
 
 
 const mongoose = require("mongoose");
@@ -53,4 +53,4 @@ class UserRepositoryMongo extends UserRepository {
   }
 }
 
-        module.exports = { UserRepositoryMongo, UserModel };
+module.exports = { UserRepositoryMongo, UserModel };

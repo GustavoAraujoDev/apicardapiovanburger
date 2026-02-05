@@ -8,7 +8,7 @@ const DeletePedidoUseCase = require('../../../application/use-cases/DeletePedido
 const Pedido = require('../../../domain/entities/Pedido');
 const PedidoRepositoryMongo = require("../../../infra/repositories/pedidoRepositoryMongo");
 const ImprimirPedidoUseCase = require('../../../application/use-cases/imprimirPedidoUseCase');
-const repo = new PedidoRepositoryMongo();
+const repo = PedidoRepositoryMongo;
 class PedidoController {
   // Criar pedido
    async criarPedido(req, res) {
