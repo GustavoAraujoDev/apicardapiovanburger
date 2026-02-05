@@ -46,7 +46,7 @@ const { JwtService } = require("../auth/JwtService");
  *       401:
  *         description: Credenciais inválidas
  */
-router.post("/auth/login", ProductController.login);
+router.post("/auth/login", (req, res) => ProductController.login(req, res));
 
 /**
  * @swagger
@@ -78,7 +78,7 @@ router.post("/auth/login", ProductController.login);
  *       201:
  *         description: Usuário criado com sucesso
  */
-router.post("/auth/registrar", ProductController.register);
+router.post("/auth/registrar", (req, res) => ProductController.register(req, res));
 
 /* =========================
    MIDDLEWARE DE AUTENTICAÇÃO
