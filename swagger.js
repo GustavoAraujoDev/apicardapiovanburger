@@ -31,6 +31,13 @@ Documentação gerada automaticamente via JSDoc.
     ],
 
     components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT"
+        }
+      },
       schemas: {
 
         Product: {
