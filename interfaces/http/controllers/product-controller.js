@@ -3,7 +3,7 @@ const GetProducts = require("../../../application/use-cases/get-products");
 const findById = require("../../../application/use-cases/get-product-by-id");
 const DeleteProduct = require("../../../application/use-cases/delete-product");
 const Productsupdate = require("../../../application/use-cases/update-product");
-const LoginUser = require("../../../application/use-cases/auth/LoginUseCase");
+const LoginUserUseCase = require("../../../application/use-cases/auth/LoginUserUseCase");
 const RegisterUserUseCase = require("../../../application/use-cases/RegisterUserUseCase");
 const ProductRepositoryMongo = require("../../../infra/repositories/productRepositoryMongo");
 const UserRepositoryMongo = require("../../../infra/repositories/UserRepositoryMongo");
@@ -25,7 +25,7 @@ class ProductController {
     console.log(req.body);
     try {
       const userRepo = new UserRepositoryMongo();
-      const loginUser = new LoginUser(userRepo, new BcryptPasswordService(), new JwtService());
+      const loginUser = new LoginUserUseCase(userRepo, new BcryptPasswordService(), new JwtService());
       const product = await loginUser.execute(req.body);
       return res.status(201).json(product);
     } catch (error) {
