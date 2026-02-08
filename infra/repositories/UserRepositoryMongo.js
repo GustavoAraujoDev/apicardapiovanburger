@@ -1,5 +1,5 @@
 const UserRepository = require("../../domain/entities/UserRepository");
-
+const User = require("../../domain/entities/User");
 
 const mongoose = require("mongoose");
 
@@ -45,11 +45,31 @@ class UserRepositoryMongo extends UserRepository {
   }
 
   async findByEmail(email) {
-    return await UserModel.findOne({ email });
+    const doc = await UserModel.findOne({ email }).lean();
+
+    if (!doc) return null;
+
+    return new User(
+      doc._id.toString(),
+      doc.email,
+      doc.passwordHash,
+      doc.role,
+      doc.active
+    );
   }
 
   async findById(id) {
-    return await UserModel.findById(id);
+    const doc = await UserModel.findById(id).lean();
+
+    if (!doc) return null;
+
+    return new User(
+      doc._id.toString(),
+      doc.email,
+      doc.passwordHash,
+      doc.role,
+      doc.active
+    );
   }
 }
 
