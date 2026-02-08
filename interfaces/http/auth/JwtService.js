@@ -11,7 +11,7 @@ class JwtService extends TokenService {
         role: user.role,
         type: "USER"
       },
-      process.env.JWT_PRIVATE_KEY,
+      process.env.JWT_SECRET,
       {
         algorithm: "RS256",
         expiresIn: "5m",
@@ -30,7 +30,7 @@ class JwtService extends TokenService {
   verifyAccessToken(token) {
     return jwt.verify(
       token,
-      process.env.JWT_PUBLIC_KEY,
+      process.env.JWT_SECRET_PUBLIC,
       { algorithms: ["RS256"] }
     );
   }
