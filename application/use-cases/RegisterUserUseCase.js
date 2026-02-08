@@ -22,7 +22,7 @@ class RegisterUserUseCase {
     }
 
     // ✅ controle de roles
-    const allowedRoles = ['user', 'admin'];
+    const allowedRoles = ['ADMIN', 'EMPLOYEE'];
     if (!allowedRoles.includes(role)) {
       throw new Error('Role inválida');
     }
