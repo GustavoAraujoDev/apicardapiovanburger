@@ -61,19 +61,19 @@ router.post("/auth/login", (req, res) => ProductController.login(req, res));
  *           schema:
  *             type: object
  *             required:
- *               - nome
  *               - email
  *               - password
+ *.              - role
  *             properties:
- *               nome:
- *                 type: string
- *                 example: João Silva
  *               email:
  *                 type: string
  *                 example: joao@email.com
  *               password:
  *                 type: string
  *                 example: "123456"
+ *               role:
+ *                 type: string
+ *                 example: user
  *     responses:
  *       201:
  *         description: Usuário criado com sucesso
