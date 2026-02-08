@@ -1,4 +1,4 @@
-const API_URL = "https://apicardapiovanburger.onrender.com";
+const API_URL = "https://gestaoproapi.onrender.com";
 const corsWhiteList = {
     development: [
       "http://localhost:3000"
