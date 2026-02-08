@@ -11,25 +11,86 @@ const JwtService = require("../auth/JwtService");
 const BcryptPasswordService = require("../security/BcryptPasswordService");
 class ProductController {
   async Registrer(req, res) {
-    console.log(req.body);
     try {
+      const { email, password, role } = req.body;
+
+      // ✅ Validação básica (camada HTTP)
+      if (!email || !password) {
+        return res.status(422).json({
+          error: "Email e senha são obrigatórios"
+        });
+      }
+
       const userRepo = new UserRepositoryMongo();
-      const registerUser = new RegisterUserUseCase(userRepo, new BcryptPasswordService());
-      const product = await registerUser.execute(req.body.email, req.body.password, req.body.role);
-      return res.status(201).json(product);
+      const passwordService = new BcryptPasswordService();
+      const registerUser = new RegisterUserUseCase(userRepo, passwordService);
+
+      const user = await registerUser.execute({
+        email,
+        password,
+        role
+      });
+
+      return res.status(201).json({
+        message: "Usuário criado com sucesso",
+        user
+      });
+
     } catch (error) {
-      return res.status(400).json({ error: error.message });
+      console.error("REGISTER_USER_ERROR:", error);
+
+      // ✅ erro de regra de negócio
+      if (error.message?.includes("já existe")) {
+        return res.status(409).json({ error: error.message });
+      }
+
+      return res.status(500).json({
+        error: "Erro interno ao criar usuário"
+      });
     }
   }
+
   async login(req, res) {
-    console.log(req.body);
     try {
+      const { email, password } = req.body;
+
+      // ✅ Validação básica
+      if (!email || !password) {
+        return res.status(422).json({
+          error: "Email e senha são obrigatórios"
+        });
+      }
+
       const userRepo = new UserRepositoryMongo();
-      const loginUser = new LoginUserUseCase(userRepo, new BcryptPasswordService(), new JwtService());
-      const product = await loginUser.execute(req.body);
-      return res.status(201).json(product);
+      const passwordService = new BcryptPasswordService();
+      const jwtService = new JwtService();
+
+      const loginUser = new LoginUserUseCase(
+        userRepo,
+        passwordService,
+        jwtService
+      );
+
+      const auth = await loginUser.execute({
+        email,
+        password
+      });
+
+      return res.status(200).json(auth);
+
     } catch (error) {
-      return res.status(400).json({ error: error.message });
+      console.error("LOGIN_ERROR:", error);
+
+      // ✅ credenciais inválidas
+      if (error.message?.includes("Credenciais")) {
+        return res.status(401).json({
+          error: "Email ou senha inválidos"
+        });
+      }
+
+      return res.status(500).json({
+        error: "Erro interno ao realizar login"
+      });
     }
   }
 
