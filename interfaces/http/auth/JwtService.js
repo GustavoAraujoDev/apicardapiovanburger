@@ -5,6 +5,10 @@ const { urlencoded } = require("body-parser");
 
 class JwtService extends TokenService {
   generateAccessToken(user) {
+    console.log(
+    "[JWT_DEBUG] JWT_SECRET existe?",
+    !!process.env.JWT_SECRET
+    );
     return jwt.sign(
       {
         sub: user.id,
