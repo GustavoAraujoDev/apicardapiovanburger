@@ -1,5 +1,5 @@
 const UserRepository = require("../../domain/entities/UserRepository");
-const User = require("../../domain/entities/User");
+const User = require("../../domain/entities/user");
 
 const mongoose = require("mongoose");
 
