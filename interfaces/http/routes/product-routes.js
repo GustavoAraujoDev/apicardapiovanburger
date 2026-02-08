@@ -63,7 +63,7 @@ router.post("/auth/login", (req, res) => ProductController.login(req, res));
  *             required:
  *               - email
  *               - password
- *.              - role
+ *               - role
  *             properties:
  *               email:
  *                 type: string
