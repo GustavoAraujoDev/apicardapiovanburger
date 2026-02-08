@@ -5,8 +5,8 @@ const ProductController = require("../controllers/product-controller");
 const validateRequest = require("../middlewares/validateRequest");
 const ProductValidator = require("../../../application/validators/productValidator");
 const AuthMiddleware = require("../auth/AuthMiddleware");
-const { JwtService } = require("../auth/JwtService");
-
+const JwtService = require("../auth/JwtService");
+const jwtService = new JwtService();
 /**
  * @swagger
  * tags:
@@ -83,7 +83,7 @@ router.post("/auth/registrar", (req, res) => ProductController.Registrer(req, re
 /* =========================
    MIDDLEWARE DE AUTENTICAÇÃO
 ========================= */
-router.use(AuthMiddleware(JwtService));
+router.use(AuthMiddleware(jwtService));
 
 /* =========================
    ROTAS PROTEGIDAS
