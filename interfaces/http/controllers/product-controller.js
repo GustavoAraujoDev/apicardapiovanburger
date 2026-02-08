@@ -6,7 +6,7 @@ const Productsupdate = require("../../../application/use-cases/update-product");
 const LoginUserUseCase = require("../../../application/use-cases/auth/LoginUserUseCase");
 const RegisterUserUseCase = require("../../../application/use-cases/RegisterUserUseCase");
 const ProductRepositoryMongo = require("../../../infra/repositories/productRepositoryMongo");
-const UserRepositoryMongo = require("../../../infra/repositories/UserRepositoryMongo");
+const { UserRepositoryMongo } = require("../../../infra/repositories/UserRepositoryMongo");
 const JwtService = require("../auth/JwtService");
 const BcryptPasswordService = require("../security/BcryptPasswordService");
 class ProductController {
