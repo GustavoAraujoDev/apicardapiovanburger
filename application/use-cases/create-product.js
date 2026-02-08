@@ -7,7 +7,6 @@ class CreateProduct {
 
   async execute(productData) {
     const product = new Product(productData);
-    ProductValidator.validate(product);
     return await this.productRepo.create(product);
   }
 }
