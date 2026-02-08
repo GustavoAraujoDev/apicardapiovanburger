@@ -51,48 +51,47 @@ class ProductController {
   }
 
   async login(req, res) {
-    try {
-      const { email, password } = req.body;
+  console.log("[LOGIN_CONTROLLER] Request recebida");
 
-      // ✅ Validação básica
-      if (!email || !password) {
-        return res.status(422).json({
-          error: "Email e senha são obrigatórios"
-        });
-      }
+  try {
+    const { email, password } = req.body;
+    console.log("[LOGIN_CONTROLLER] Email recebido:", email);
 
-      const userRepo = new UserRepositoryMongo();
-      const passwordService = new BcryptPasswordService();
-      const jwtService = new JwtService();
-
-      const loginUser = new LoginUserUseCase(
-        userRepo,
-        passwordService,
-        jwtService
-      );
-
-      const auth = await loginUser.execute({
-        email,
-        password
-      });
-
-      return res.status(200).json(auth);
-
-    } catch (error) {
-      console.error("LOGIN_ERROR:", error);
-
-      // ✅ credenciais inválidas
-      if (error.message?.includes("Credenciais")) {
-        return res.status(401).json({
-          error: "Email ou senha inválidos"
-        });
-      }
-
-      return res.status(500).json({
-        error: "Erro interno ao realizar login"
+    if (!email || !password) {
+      return res.status(422).json({
+        error: "Email e senha são obrigatórios"
       });
     }
+
+    const userRepo = new UserRepositoryMongo();
+    const passwordService = new BcryptPasswordService();
+    const jwtService = new JwtService();
+
+    const loginUser = new LoginUserUseCase(
+      userRepo,
+      passwordService,
+      jwtService
+    );
+
+    const auth = await loginUser.execute({ email, password });
+
+    console.log("[LOGIN_CONTROLLER] Login OK");
+    return res.status(200).json(auth);
+
+  } catch (error) {
+    console.error("[LOGIN_CONTROLLER_ERROR]", error);
+
+    if (error.message?.includes("Credenciais")) {
+      return res.status(401).json({
+        error: "Email ou senha inválidos"
+      });
+    }
+
+    return res.status(500).json({
+      error: "Erro interno ao realizar login"
+    });
   }
+}
 
   async create(req, res) {
     console.log(req.body);
