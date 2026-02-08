@@ -8,10 +8,13 @@ const ProductSchema = new mongoose.Schema({
   description: { type: String, required: true },
   price: { type: Number, required: true },
   images: [{ type: String, required: true }],
-  category: { type: String, required: true }, // Novo campo
+  category: { type: String, required: true },
   colors: [{ type: String, required: true }],
-  tamanhos: [{type: String, required: true }],
-});
+  tamanhos: [{ type: String, required: true }],
+  stock: { type: Number, required: true },
+  status: { type: String, required: true },
+  priceHistory: { type: Array, default: [] } // Mantém histórico
+}, { timestamps: true });
 
 /** @type {*} */
 const ProductModel = mongoose.model("Product", ProductSchema);
