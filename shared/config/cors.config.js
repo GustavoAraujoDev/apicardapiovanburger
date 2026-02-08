@@ -7,6 +7,7 @@ const corsWhiteList = {
       "https://staging.app.com"
     ],
     production: [
+      "https://apicardapiovanburger.onrender.com",
       "https://meuapp.com",
       API_URL
     ]
