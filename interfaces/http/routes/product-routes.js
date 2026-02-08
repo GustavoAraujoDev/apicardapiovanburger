@@ -109,7 +109,7 @@ router.use(AuthMiddleware(jwtService));
  */
 router.post(
   "/",
-  validateRequest(ProductValidator.create),
+  validateRequest(ProductValidator.Create),
   ProductController.create
 );
 
