@@ -78,7 +78,7 @@ router.post("/auth/login", (req, res) => ProductController.login(req, res));
  *       201:
  *         description: Usuário criado com sucesso
  */
-router.post("/auth/registrar", (req, res) => ProductController.register(req, res));
+router.post("/auth/registrar", (req, res) => ProductController.Registrer(req, res));
 
 /* =========================
    MIDDLEWARE DE AUTENTICAÇÃO
