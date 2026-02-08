@@ -10,41 +10,78 @@ class RegisterUserUseCase {
   }
 
   async execute({ email, password, role }) {
-
-    if (!email || !password) {
-      throw new Error('Email e senha são obrigatórios');
-    }
-
-    const exists = await this.userRepository.findByEmail(email);
-
-    if (exists) {
-      throw new Error('Usuário já existe');
-    }
-
-    // ✅ controle de roles
-    const allowedRoles = ['ADMIN', 'EMPLOYEE'];
-    if (!allowedRoles.includes(role)) {
-      throw new Error('Role inválida');
-    }
-
-    const passwordHash = await this.passwordService.hash(password);
-
-    const user = new User(
-      randomUUID(),
+    console.log("[REGISTER] Iniciando registro", {
       email,
-      passwordHash,
-      role,
-      true
-    );
+      role
+    });
 
-    await this.userRepository.save(user);
+    try {
+      // 🔹 validação inicial
+      if (!email || !password) {
+        console.warn("[REGISTER] Dados obrigatórios ausentes", {
+          email,
+          passwordProvided: !!password
+        });
+        throw new Error("Email e senha são obrigatórios");
+      }
 
-    return {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-      active: user.active
-    };
+      console.log("[REGISTER] Verificando se usuário já existe");
+      const exists = await this.userRepository.findByEmail(email);
+      console.log("[REGISTER] Resultado findByEmail:", !!exists);
+
+      if (exists) {
+        console.warn("[REGISTER] Usuário já existente", { email });
+        throw new Error("Usuário já existe");
+      }
+
+      // 🔹 validação de role
+      const allowedRoles = ["ADMIN", "EMPLOYEE"];
+      console.log("[REGISTER] Validando role", { role });
+
+      if (!allowedRoles.includes(role)) {
+        console.warn("[REGISTER] Role inválida", { role });
+        throw new Error("Role inválida");
+      }
+
+      console.log("[REGISTER] Gerando hash da senha");
+      const passwordHash = await this.passwordService.hash(password);
+      console.log("[REGISTER] Hash gerado com sucesso");
+
+      const user = new User(
+        randomUUID(),
+        email,
+        passwordHash,
+        role,
+        true
+      );
+
+      console.log("[REGISTER] Salvando usuário no banco", {
+        email: user.email,
+        role: user.role
+      });
+
+      await this.userRepository.save(user);
+
+      console.log("[REGISTER] Usuário criado com sucesso", {
+        email: user.email,
+        role: user.role
+      });
+
+      return {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        active: user.active
+      };
+
+    } catch (error) {
+      console.error("[REGISTER] ERRO NO REGISTRO", {
+        message: error.message,
+        stack: error.stack
+      });
+
+      throw error; // 🔥 importante: não engole o erro
+    }
   }
 }
 
