@@ -41,27 +41,44 @@ Documentação gerada automaticamente via JSDoc.
       schemas: {
 
         Product: {
-          type: 'object',
-          required: ['name', 'description', 'price', 'images', 'category', 'colors', 'tamanhos'],
-          properties: {
-            name: { type: 'string', example: 'Camiseta Premium' },
-            description: { type: 'string', example: 'Camiseta de algodão 100%' },
-            price: { type: 'number', example: 79.9 },
-            images: {
-              type: 'array',
-              items: { type: 'string', example: 'https://site.com/img1.png' }
-            },
-            category: { type: 'string', example: 'Roupas' },
-            colors: {
-              type: 'array',
-              items: { type: 'string', example: 'Preto' }
-            },
-            tamanhos: {
-              type: 'array',
-              items: { type: 'string', example: 'M' }
-            }
-          }
-        },
+  type: 'object',
+  required: [
+    'name',
+    'description',
+    'price',
+    'images',
+    'category',
+    'colors',
+    'tamanhos',
+    'stock',
+    'status'
+  ],
+  properties: {
+    name: { type: 'string', example: 'Camiseta Premium' },
+    description: { type: 'string', example: 'Camiseta de algodão 100%' },
+    price: { type: 'number', example: 179.9 },
+    images: {
+      type: 'array',
+      items: { type: 'string', example: 'https://site.com/img1.png' }
+    },
+    category: { type: 'string', example: 'Roupas' },
+    colors: {
+      type: 'array',
+      items: { type: 'string', example: 'Preto' }
+    },
+    tamanhos: {
+      type: 'array',
+      items: { type: 'string', example: 'M' }
+    },
+    stock: { type: 'number', example: 50 },
+    status: { type: 'string', example: 'ativo' },
+    priceHistory: {
+      type: 'array',
+      items: { type: 'object' },
+      example: []
+    }
+  }
+},
 
         Pedido: {
           type: 'object',
