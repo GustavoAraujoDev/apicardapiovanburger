@@ -28,7 +28,7 @@ class JwtService extends TokenService {
         {
           // ⚠️ PARA DEBUG — depois trocamos
           algorithm: "HS256",
-          expiresIn: "5m",
+          expiresIn: "20m",
           issuer: "fintech-auth",
           audience: "fintech-api"
         }
