@@ -9,35 +9,37 @@ class LoginUserUseCase {
     console.log("[LOGIN_USECASE] Iniciando login:", email);
 
     const user = await this.userRepo.findByEmail(email);
+    console.log("[LOGIN_USECASE] Usuário encontrado?", !!user);
 
     if (!user) {
       console.warn("[LOGIN_USECASE] Usuário não encontrado:", email);
       throw new Error("Credenciais inválidas");
     }
 
+    console.log("[LOGIN_USECASE] Usuário ativo?", user.active);
+
     if (!user.canLogin()) {
       console.warn("[LOGIN_USECASE] Usuário inativo:", email);
       throw new Error("Credenciais inválidas");
     }
+
+    console.log("[LOGIN_USECASE] Validando senha");
 
     const validPassword = await this.passwordHasher.compare(
       password,
       user.getPasswordHash()
     );
 
+    console.log("[LOGIN_USECASE] Senha válida?", validPassword);
+
     if (!validPassword) {
-      console.warn("[LOGIN_USECASE] Senha inválida:", email);
       throw new Error("Credenciais inválidas");
     }
 
-    const accessToken = this.tokenService.generateAccessToken({
-      sub: user.id,
-      role: user.role
-    });
+    console.log("[LOGIN_USECASE] Gerando tokens");
 
-    const refreshToken = this.tokenService.generateRefreshToken({
-      sub: user.id
-    });
+    const accessToken = this.tokenService.generateAccessToken(user);
+    const refreshToken = await this.tokenService.generateRefreshToken(user);
 
     console.log("[LOGIN_USECASE] Login realizado com sucesso:", email);
 
