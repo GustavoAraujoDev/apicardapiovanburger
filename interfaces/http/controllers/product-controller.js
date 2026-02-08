@@ -52,7 +52,7 @@ class ProductController {
 
   async login(req, res) {
   console.log("[LOGIN_CONTROLLER] Request recebida");
-
+  console.log("[LOGIN] JWT_SECRET:", process.env.JWT_SECRET);
   try {
     const { email, password } = req.body;
     console.log("[LOGIN_CONTROLLER] Email recebido:", email);
