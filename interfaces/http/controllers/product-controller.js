@@ -94,16 +94,48 @@ class ProductController {
 }
 
   async create(req, res) {
-    console.log(req.body);
-    try {
-      const repo = new ProductRepositoryMongo();
-      const createProduct = new CreateProduct(repo);
-      const product = await createProduct.execute(req.body);
-      return res.status(201).json(product);
-    } catch (error) {
-      return res.status(400).json({ error: error.message });
+  // 🔹 Log inicial para depuração no Render
+  console.log("[ProductController.create] Requisição recebida:", {
+    body: req.body,
+    headers: req.headers,
+    time: new Date().toISOString()
+  });
+
+  try {
+    // 🔹 Inicializa o repositório e caso de uso
+    const repo = new ProductRepositoryMongo();
+    const createProduct = new CreateProduct(repo);
+
+    // 🔹 Validação extra opcional antes de criar (pode ser útil para logs)
+    if (!req.body || Object.keys(req.body).length === 0) {
+      console.warn("[ProductController.create] req.body está vazio!");
+      return res.status(400).json({ error: "O corpo da requisição está vazio" });
     }
+
+    // 🔹 Criação do produto
+    const product = await createProduct.execute(req.body);
+
+    // 🔹 Log de sucesso
+    console.log("[ProductController.create] Produto criado com sucesso:", {
+      productId: product._id,
+      name: product.name,
+      time: new Date().toISOString()
+    });
+
+    // 🔹 Retorna produto criado
+    return res.status(201).json(product);
+  } catch (error) {
+    // 🔹 Log detalhado do erro
+    console.error("[ProductController.create] Erro ao criar produto:", {
+      message: error.message,
+      stack: error.stack,
+      time: new Date().toISOString()
+    });
+
+    // 🔹 Retorna mensagem amigável
+    return res.status(400).json({ error: error.message });
   }
+}
 
   async getAll(req, res) {
     try {
