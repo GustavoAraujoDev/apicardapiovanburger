@@ -1,7 +1,23 @@
 class Product {
-  constructor({ name, description, price, images = [], category, colors = [], tamanhos = [] }) {
-    if (!name || !description || !price || !images || !category || !colors || !tamanhos) {
-      throw new Error("All fields are required");
+  constructor({
+    name,
+    description,
+    price,
+    images = [],
+    category,
+    colors = [],
+    tamanhos = [],
+    stock,
+    status,
+    priceHistory = []
+  }) {
+    // Validação mínima
+    if (
+      !name || !description || !price ||
+      !images || !category || !colors || !tamanhos ||
+      stock === undefined || !status
+    ) {
+      throw new Error("All required fields must be provided");
     }
 
     this.name = name;
@@ -11,6 +27,9 @@ class Product {
     this.category = category;
     this.colors = colors;
     this.tamanhos = tamanhos;
+    this.stock = stock;
+    this.status = status;
+    this.priceHistory = priceHistory;
   }
 }
 
