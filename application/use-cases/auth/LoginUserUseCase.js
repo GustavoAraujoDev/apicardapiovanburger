@@ -1,5 +1,5 @@
 const UserPolicy = require('../../domain/policies/UserPolicy');
-
+const UserPolicyLoginUseCase = new UserPolicy();
 class LoginUserUseCase {
   constructor(
     userRepo,
@@ -25,7 +25,7 @@ class LoginUserUseCase {
 
     // 👉 regra de domínio
     // 🔥 ABAC AQUI
-    if (!UserPolicy.canLogin(user, context)) {
+    if (!UserPolicyLoginUseCase.canLogin(user, context)) {
       user.registerFailedLogin();
       throw new Error('Login não permitido pelo contexto');
     }
