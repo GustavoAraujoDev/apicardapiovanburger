@@ -23,7 +23,7 @@ class LoginUserUseCase {
     // 🔥 ABAC (Policy pura)
     if (!UserPolicy.canLogin(user, context)) {
       user.registerFailedLogin();
-      await this.userRepo.save(user);
+      await this.userRepo.update(user);
       await this.eventDispatcher.dispatchAll(
         user.pullDomainEvents()
       );
@@ -37,7 +37,7 @@ class LoginUserUseCase {
 
     if (!validPassword) {
       user.registerFailedLogin();
-      await this.userRepo.save(user);
+      await this.userRepo.update(user);
       await this.eventDispatcher.dispatchAll(
         user.pullDomainEvents()
       );
@@ -45,7 +45,7 @@ class LoginUserUseCase {
     }
 
     user.registerSuccessfulLogin(context);
-    await this.userRepo.save(user);
+    await this.userRepo.update(user);
 
     await this.eventDispatcher.dispatchAll(
       user.pullDomainEvents()
