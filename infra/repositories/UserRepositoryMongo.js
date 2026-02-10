@@ -45,18 +45,22 @@ class UserRepositoryMongo extends UserRepository {
   }
 
   async findByEmail(email) {
-    const doc = await UserModel.findOne({ email }).lean();
+  const doc = await UserModel.findOne({ email }).lean();
+  if (!doc) return null;
 
-    if (!doc) return null;
-
-    return new User(
-      doc._id.toString(),
-      doc.email,
-      doc.passwordHash,
-      doc.role,
-      doc.active
-    );
-  }
+  return new User({
+    id: doc._id.toString(),
+    email: doc.email,
+    passwordHash: doc.passwordHash,
+    role: doc.role,
+    status: doc.status ?? 'active',
+    loginAttempts: doc.loginAttempts ?? 0,
+    lastLoginAt: doc.lastLoginAt ?? null,
+    blockedAt: doc.blockedAt ?? null,
+    createdAt: doc.createdAt,
+    updatedAt: doc.updatedAt
+  });
+}
 
   async findById(id) {
     const doc = await UserModel.findById(id).lean();
