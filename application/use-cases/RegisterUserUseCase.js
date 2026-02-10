@@ -47,13 +47,13 @@ class RegisterUserUseCase {
       const passwordHash = await this.passwordService.hash(password);
       console.log("[REGISTER] Hash gerado com sucesso");
 
-      const user = new User(
-        randomUUID(),
-        email,
-        passwordHash,
-        role,
-        true
-      );
+      const user = new User({
+  id: randomUUID(),
+  email,
+  passwordHash,
+  role,
+  status: 'active'
+});
 
       console.log("[REGISTER] Salvando usuário no banco", {
         email: user.email,
