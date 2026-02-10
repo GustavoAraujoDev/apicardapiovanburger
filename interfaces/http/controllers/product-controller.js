@@ -63,6 +63,11 @@ class ProductController {
       });
     }
 
+    const context = {
+        ip: req.ip,
+        userAgent: req.headers['user-agent']
+      };
+
     const userRepo = new UserRepositoryMongo();
     const passwordService = new BcryptPasswordService();
     const jwtService = new JwtService();
@@ -73,7 +78,7 @@ class ProductController {
       jwtService
     );
 
-    const auth = await loginUser.execute({ email, password });
+    const auth = await loginUser.execute({ email, password, context });
 
     console.log("[LOGIN_CONTROLLER] Login OK");
     return res.status(200).json(auth);
