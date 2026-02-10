@@ -1,4 +1,4 @@
-const UserPolicy = require('../../domain/policies/UserPolicy');
+const UserPolicy = require('../../../domain/policies/UserPolicy');
 
 class LoginUserUseCase {
   constructor(
