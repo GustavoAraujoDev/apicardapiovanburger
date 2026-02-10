@@ -1,47 +1,66 @@
 class LoginUserUseCase {
-  constructor(userRepo, passwordHasher, tokenService) {
+  constructor(
+    userRepo,
+    passwordHasher,
+    tokenService,
+    eventDispatcher
+  ) {
     this.userRepo = userRepo;
     this.passwordHasher = passwordHasher;
     this.tokenService = tokenService;
+    this.eventDispatcher = eventDispatcher;
   }
 
-  async execute({ email, password }) {
-    console.log("[LOGIN_USECASE] Iniciando login:", email);
+  async execute({ email, password, context }) {
+    console.log('[LOGIN_USECASE] Iniciando login:', email);
 
     const user = await this.userRepo.findByEmail(email);
-    console.log("[LOGIN_USECASE] Usuário encontrado?", !!user);
 
     if (!user) {
-      console.warn("[LOGIN_USECASE] Usuário não encontrado:", email);
-      throw new Error("Credenciais inválidas");
+      console.warn('[LOGIN_USECASE] Usuário não encontrado');
+      throw new Error('INVALID_CREDENTIALS');
     }
 
-    console.log("[LOGIN_USECASE] Usuário ativo?", user.active);
-
+    // 👉 regra de domínio
     if (!user.canLogin()) {
-      console.warn("[LOGIN_USECASE] Usuário inativo:", email);
-      throw new Error("Credenciais inválidas");
+      console.warn('[LOGIN_USECASE] Usuário bloqueado/inativo');
+      throw new Error('INVALID_CREDENTIALS');
     }
-
-    console.log("[LOGIN_USECASE] Validando senha");
 
     const validPassword = await this.passwordHasher.compare(
       password,
-      user.getPasswordHash()
+      user.passwordHash // OK: use case pode acessar, controller NÃO
     );
 
-    console.log("[LOGIN_USECASE] Senha válida?", validPassword);
-
     if (!validPassword) {
-      throw new Error("Credenciais inválidas");
+      console.warn('[LOGIN_USECASE] Senha inválida');
+
+      user.registerFailedLogin();
+      await this.userRepo.save(user);
+
+      // dispara eventos (ex: UserBlocked)
+      await this.eventDispatcher.dispatch(
+        user.pullDomainEvents()
+      );
+
+      throw new Error('INVALID_CREDENTIALS');
     }
 
-    console.log("[LOGIN_USECASE] Gerando tokens");
+    // 👉 sucesso
+    user.registerSuccessfulLogin(context);
+    await this.userRepo.save(user);
 
-    const accessToken = this.tokenService.generateAccessToken(user);
-    const refreshToken = await this.tokenService.generateRefreshToken(user);
+    await this.eventDispatcher.dispatch(
+      user.pullDomainEvents()
+    );
 
-    console.log("[LOGIN_USECASE] Login realizado com sucesso:", email);
+    const accessToken =
+      this.tokenService.generateAccessToken(user);
+
+    const refreshToken =
+      await this.tokenService.generateRefreshToken(user);
+
+    console.log('[LOGIN_USECASE] Login realizado com sucesso');
 
     return {
       accessToken,
