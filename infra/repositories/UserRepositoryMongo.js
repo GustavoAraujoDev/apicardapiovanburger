@@ -5,6 +5,12 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema(
   {
+    id: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true
+    },
     email: {
       type: String,
       required: true,
@@ -43,7 +49,7 @@ const UserModel = mongoose.model("User", UserSchema);
 class UserRepositoryMongo extends UserRepository {
   async save(user) {
     await UserModel.create({
-      _id: user.id,
+      id: user.id,
       email: user.email,
       passwordHash: user.passwordHash,
       role: user.role,
@@ -61,7 +67,7 @@ class UserRepositoryMongo extends UserRepository {
   if (!doc) return null;
 
   return new User({
-    id: doc._id.toString(),
+    id: doc.id.toString(),
     email: doc.email,
     passwordHash: doc.passwordHash,
     role: doc.role,
@@ -76,7 +82,7 @@ class UserRepositoryMongo extends UserRepository {
 
   async update(user) {
   await UserModel.updateOne(
-    { _id: user.id },
+    { id: user.id },
     {
       $set: {
         status: user.status,
@@ -85,7 +91,7 @@ class UserRepositoryMongo extends UserRepository {
         updatedAt: user.updatedAt
       },
       $setOnInsert: undefined,
-      $inc: {
+      $set: {
         loginAttempts: user.loginAttempts
       }
     }
@@ -98,7 +104,7 @@ class UserRepositoryMongo extends UserRepository {
     if (!doc) return null;
 
     return new User(
-      doc._id.toString(),
+      doc.id.toString(),
       doc.email,
       doc.passwordHash,
       doc.role,
