@@ -24,10 +24,11 @@ const UserSchema = new mongoose.Schema(
       default: "EMPLOYEE"
     },
 
-    active: {
-      type: Boolean,
-      default: true
-    }
+    status: {
+      type: String,
+      enum: ['active', 'blocked', 'inactive'],
+      default: 'active'
+}
   },
   {
     timestamps: true
