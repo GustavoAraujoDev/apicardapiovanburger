@@ -62,6 +62,24 @@ class UserRepositoryMongo extends UserRepository {
   });
 }
 
+  async update(user) {
+  await UserModel.updateOne(
+    { _id: user.id },
+    {
+      $set: {
+        status: user.status,
+        lastLoginAt: user.lastLoginAt,
+        blockedAt: user.blockedAt,
+        updatedAt: user.updatedAt
+      },
+      $setOnInsert: undefined,
+      $inc: {
+        loginAttempts: user.loginAttempts
+      }
+    }
+  );
+}
+
   async findById(id) {
     const doc = await UserModel.findById(id).lean();
 
