@@ -70,9 +70,15 @@ class ProductController {
     }
 
     const context = {
-        ip: req.ip,
-        userAgent: req.headers['user-agent']
-      };
+  ip: req.ip,
+  userAgent: req.headers['user-agent'],
+  deviceTrusted: true,        // vindo de um DeviceService
+  mfaValidated: false,        // ou true se validado
+  sessionAgeMinutes: 0,
+  time: {
+    isBusinessHours: () => true
+  }
+};
 
     const userRepo = new UserRepositoryMongo();
     const passwordService = new BcryptPasswordService();
