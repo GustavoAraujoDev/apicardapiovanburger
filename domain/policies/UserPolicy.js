@@ -1,18 +1,45 @@
 class UserPolicy {
-  static can({ user, action, context }) {
-    if (!user) return false;
+  /**
+   * ABAC para login
+   */
+  static canLogin(user, context) {
+    return (
+      user.status === 'active' &&
+      context.ip !== 'BLACKLISTED' &&
+      context.deviceTrusted === true &&
+      context.mfaValidated === true
+    );
+  }
 
-    if (action === 'LOGIN') {
-      if (!user.canLogin()) return false;
-      if (context?.ipBlacklisted) return false;
-      return true;
-    }
+  /**
+   * Exemplo: bloquear usuário
+   */
+  static canBlockUser(actor, targetUser) {
+    return (
+      actor.hasRole('admin') &&
+      actor.id !== targetUser.id &&
+      targetUser.status !== 'blocked'
+    );
+  }
 
-    if (action === 'ACCESS_ADMIN') {
-      return user.role.value === 'admin';
-    }
+  /**
+   * Exemplo: trocar senha
+   */
+  static canChangePassword(user, context) {
+    return (
+      user.status === 'active' &&
+      context.sessionAgeMinutes < 15
+    );
+  }
 
-    return false;
+  /**
+   * Exemplo: acesso por horário (compliance)
+   */
+  static canAccessSystem(user, context) {
+    return (
+      user.status === 'active' &&
+      context.time.isBusinessHours()
+    );
   }
 }
 
