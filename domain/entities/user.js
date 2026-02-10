@@ -72,10 +72,6 @@ class User {
      ESTADO E COMPORTAMENTO
      ========================== */
 
-  canLogin() {
-    return this.status === 'active';
-  }
-
   registerSuccessfulLogin(context) {
     if (!this.canLogin()) {
       throw new Error('User is not allowed to login');
@@ -127,37 +123,6 @@ class User {
   deactivate() {
     this.status = 'inactive';
     this.touch();
-  }
-
-  /* ==========================
-     AUTORIZAÇÃO (RBAC)
-     ========================== */
-
-  hasRole(role) {
-    return this.role === role;
-  }
-
-  can(permission) {
-    const permissionsByRole = {
-      admin: [
-        'USER_CREATE',
-        'USER_UPDATE',
-        'USER_DELETE',
-        'ACCESS_ADMIN_PANEL',
-        'PRODUCT_CREATE',
-        'PRODUCT_UPDATE',
-        'PRODUCT_DELETE'
-      ],
-      manager: [
-        'PRODUCT_CREATE',
-        'PRODUCT_UPDATE'
-      ],
-      user: [
-        'PRODUCT_VIEW'
-      ]
-    };
-
-    return permissionsByRole[this.role]?.includes(permission) ?? false;
   }
 
   /* ==========================
