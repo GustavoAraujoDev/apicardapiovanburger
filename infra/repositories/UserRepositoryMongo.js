@@ -41,8 +41,19 @@ const UserModel = mongoose.model("User", UserSchema);
 
 
 class UserRepositoryMongo extends UserRepository {
-  async save(userData) {
-    return await UserModel.create(userData);
+  async save(user) {
+    await UserModel.create({
+      _id: user.id,
+      email: user.email,
+      passwordHash: user.passwordHash,
+      role: user.role,
+      status: user.status,
+      loginAttempts: user.loginAttempts,
+      lastLoginAt: user.lastLoginAt,
+      blockedAt: user.blockedAt,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    });
   }
 
   async findByEmail(email) {
