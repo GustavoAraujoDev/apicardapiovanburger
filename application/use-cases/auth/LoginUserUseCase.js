@@ -1,5 +1,5 @@
 const UserPolicy = require('../../domain/policies/UserPolicy');
-const UserPolicyLoginUseCase = new UserPolicy();
+
 class LoginUserUseCase {
   constructor(
     userRepo,
@@ -14,60 +14,46 @@ class LoginUserUseCase {
   }
 
   async execute({ email, password, context }) {
-    console.log('[LOGIN_USECASE] Iniciando login:', email);
-
     const user = await this.userRepo.findByEmail(email);
 
     if (!user) {
-      console.warn('[LOGIN_USECASE] Usuário não encontrado');
       throw new Error('INVALID_CREDENTIALS');
     }
 
-    // 👉 regra de domínio
-    // 🔥 ABAC AQUI
-    if (!UserPolicyLoginUseCase.canLogin(user, context)) {
+    // 🔥 ABAC (Policy pura)
+    if (!UserPolicy.canLogin(user, context)) {
       user.registerFailedLogin();
-      throw new Error('Login não permitido pelo contexto');
+      await this.userRepo.save(user);
+      await this.eventDispatcher.dispatchAll(
+        user.pullDomainEvents()
+      );
+      throw new Error('LOGIN_NOT_ALLOWED');
     }
 
     const validPassword = await this.passwordHasher.compare(
       password,
-      user.passwordHash // OK: use case pode acessar, controller NÃO
+      user.passwordHash
     );
 
     if (!validPassword) {
-      console.warn('[LOGIN_USECASE] Senha inválida');
-
       user.registerFailedLogin();
       await this.userRepo.save(user);
-
-      // dispara eventos (ex: UserBlocked)
-      await this.eventDispatcher.dispatch(
+      await this.eventDispatcher.dispatchAll(
         user.pullDomainEvents()
       );
-
       throw new Error('INVALID_CREDENTIALS');
     }
 
-    // 👉 sucesso
     user.registerSuccessfulLogin(context);
     await this.userRepo.save(user);
 
-    await this.eventDispatcher.dispatch(
+    await this.eventDispatcher.dispatchAll(
       user.pullDomainEvents()
     );
 
-    const accessToken =
-      this.tokenService.generateAccessToken(user);
-
-    const refreshToken =
-      await this.tokenService.generateRefreshToken(user);
-
-    console.log('[LOGIN_USECASE] Login realizado com sucesso');
-
     return {
-      accessToken,
-      refreshToken
+      accessToken: this.tokenService.generateAccessToken(user),
+      refreshToken: await this.tokenService.generateRefreshToken(user)
     };
   }
 }
