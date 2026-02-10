@@ -9,6 +9,15 @@ const { ProductRepositoryMongo } = require("../../../infra/repositories/productR
 const { UserRepositoryMongo } = require("../../../infra/repositories/UserRepositoryMongo");
 const JwtService = require("../auth/JwtService");
 const BcryptPasswordService = require("../security/BcryptPasswordService");
+const UserBlocked = require('../../../domain/events/UserBlocked');
+const UserLoggedIn = require('../../../domain/events/UserLoggedIn');
+// Events
+const eventDispatcher = new EventDispatcher({
+  UserBlocked: new OnUserBlocked(auditLogger),
+  UserLoggedIn: new OnUserLoggedIn(auditLogger)
+});
+
+
 class ProductController {
   async Registrer(req, res) {
     try {
@@ -75,7 +84,8 @@ class ProductController {
     const loginUser = new LoginUserUseCase(
       userRepo,
       passwordService,
-      jwtService
+      jwtService,
+      eventDispatcher
     );
 
     const auth = await loginUser.execute({ email, password, context });
