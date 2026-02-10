@@ -1,3 +1,5 @@
+const UserPolicy = require('../../domain/policies/UserPolicy');
+
 class LoginUserUseCase {
   constructor(
     userRepo,
@@ -22,9 +24,10 @@ class LoginUserUseCase {
     }
 
     // 👉 regra de domínio
-    if (!user.canLogin()) {
-      console.warn('[LOGIN_USECASE] Usuário bloqueado/inativo');
-      throw new Error('INVALID_CREDENTIALS');
+    // 🔥 ABAC AQUI
+    if (!UserPolicy.canLogin(user, context)) {
+      user.registerFailedLogin();
+      throw new Error('Login não permitido pelo contexto');
     }
 
     const validPassword = await this.passwordHasher.compare(
