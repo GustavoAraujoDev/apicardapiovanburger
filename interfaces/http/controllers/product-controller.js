@@ -12,10 +12,7 @@ const BcryptPasswordService = require("../security/BcryptPasswordService");
 const UserBlocked = require('../../../domain/events/UserBlocked');
 const UserLoggedIn = require('../../../domain/events/UserLoggedIn');
 // Events
-const eventDispatcher = new EventDispatcher({
-  UserBlocked: new OnUserBlocked(auditLogger),
-  UserLoggedIn: new OnUserLoggedIn(auditLogger)
-});
+const eventDispatcher = new EventDispatcher();
 
 
 class ProductController {
