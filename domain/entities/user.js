@@ -55,8 +55,8 @@ class User {
   }
 
   validateRole(role) {
-    const allowedRoles = ['admin', 'manager', 'user'];
-    if (!allowedRoles.includes(role)) {
+    const allowedRoles = ["ADMIN", "EMPLOYEE"];
+  if (!allowedRoles.includes(role)) {
       throw new Error(`Invalid role: ${role}`);
     }
   }
