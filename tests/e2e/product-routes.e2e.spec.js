@@ -30,6 +30,8 @@ describe("Product Routes - E2E", () => {
         category: "Acessórios",
         colors: ["Preto"],
         tamanhos: ["U"],
+        stock: 10,
+        status: "active"
       });
 
     expect(response.status).toBe(201);
