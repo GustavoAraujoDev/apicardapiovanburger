@@ -18,6 +18,7 @@
   "author": "Ives van Hoorne",
   "license": "MIT",
   "devDependencies": {
+    "mongodb-memory-server": "^9.5.0",
     "clean-jsdoc-theme": "^4.3.0",
     "eslint": "9.15.0",
     "jest": "^30.2.0",
