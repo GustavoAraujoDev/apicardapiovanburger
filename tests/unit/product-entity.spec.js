@@ -9,7 +9,9 @@ describe("Product Entity", () => {
       images: ["img1.jpg"],
       category: "Roupas",
       colors: ["Preto"],
-      tamanhos: ["M"]
+      tamanhos: ["M"],
+      stock: 10,
+      status: "active"
     };
 
     const product = new Product(data);
