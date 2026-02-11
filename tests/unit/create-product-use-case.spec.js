@@ -1,6 +1,6 @@
-jest.mock("../../infra/repositories/product-repository");
+jest.mock("../../infra/repositories/productRepositoryMongo");
 
-const { productRepository } = require("../../infra/repositories/product-repository");
+const { productRepositoryMongo } = require("../../infra/repositories/productRepositoryMongo");
 const CreateProduct = require("../../application/use-cases/create-product");
 
 describe("CreateProduct Use Case", () => {
@@ -9,7 +9,7 @@ describe("CreateProduct Use Case", () => {
   });
 
   it("should create product successfully", async () => {
-    productRepository.create.mockResolvedValue({
+    productRepositoryMongo.create.mockResolvedValue({
       id: "123",
       name: "Camisa",
     });
@@ -24,9 +24,11 @@ describe("CreateProduct Use Case", () => {
       category: "Roupas",
       colors: ["Preto"],
       tamanhos: ["M"],
+      stock: 10,
+      status: "active"
     });
 
     expect(result.id).toBe("123");
-    expect(productRepository.create).toHaveBeenCalled();
+    expect(productRepositoryMongo.create).toHaveBeenCalled();
   });
 });
