@@ -10,7 +10,7 @@ class Product {
     tamanhos = [],
     stock,
     status,
-    priceHistory = [],
+    priceHistory = []
   }) {
 
     if (!name || typeof name !== "string") {
