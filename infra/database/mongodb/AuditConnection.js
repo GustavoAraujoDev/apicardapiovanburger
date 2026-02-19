@@ -3,7 +3,7 @@
 const mongoose = require("mongoose");
 
 const auditConnection = mongoose.createConnection(
-  process.env.AUDIT_DB_URI,
+  `mongodb+srv://gustavobarrosaraujo10:Gu290901.@gustavoaraujo.s8hht.mongodb.net/?appName=gustavoAraujo`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
