@@ -2,7 +2,7 @@ const UserRepository = require('../../domain/entities/UserRepository');
 const PasswordService = require('../../domain/services/PasswordService');
 const User = require('../../domain/entities/user');
 const { randomUUID } = require('crypto');
-const UserPolicy = require('../../../domain/policies/UserPolicy');
+const UserPolicy = require('../../domain/policies/UserPolicy');
 
 class RegisterUserUseCase {
   constructor(userRepository, passwordService) {
