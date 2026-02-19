@@ -1,7 +1,7 @@
 const CreateProduct = require("../../../application/use-cases/create-product");
 const GetProducts = require("../../../application/use-cases/get-products");
 const findById = require("../../../application/use-cases/get-product-by-id");
-const DeleteProduct = require("../../../application/use-cases/delete-product");
+const DeleteProducts = require("../../../application/use-cases/delete-product");
 const Productsupdate = require("../../../application/use-cases/update-product");
 const LoginUserUseCase = require("../../../application/use-cases/auth/LoginUserUseCase");
 const RegisterUserUseCase = require("../../../application/use-cases/RegisterUserUseCase");
@@ -196,16 +196,45 @@ class ProductController {
   }
 
   async delete(req, res) {
-    const {id} = req.params;
-    try {
-      const repo = new ProductRepositoryMongo();
-      const deleteProduct = new DeleteProduct(repo);
-      const products = await deleteProduct.execute(id);
-      return res.status(200).json(products);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
+  const { id } = req.params;
+  const userId = req.user?.id; // vindo do JWT middleware
+
+  try {
+    const productRepo = new ProductRepositoryMongo();
+    const userRepo = new UserRepositoryMongo();
+
+    const deleteProduct = new DeleteProducts(productRepo, userRepo);
+
+    const result = await deleteProduct.execute({
+      id,
+      userId
+    });
+
+    return res.status(200).json(result);
+
+  } catch (error) {
+
+    // 🔐 Autorização
+    if (error.message.includes("ADMIN") || 
+        error.message.includes("Usuário inativo")) {
+      return res.status(403).json({ error: error.message });
     }
+
+    // 🔎 Não encontrado
+    if (error.message.includes("não encontrado")) {
+      return res.status(404).json({ error: error.message });
+    }
+
+    // 📌 Regra de negócio
+    if (error.message.includes("estoque") ||
+        error.message.includes("ativo")) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    console.error(error);
+    return res.status(500).json({ error: "Erro interno do servidor" });
   }
+}
 
    async update(req, res) {
     console.log(req.body);
