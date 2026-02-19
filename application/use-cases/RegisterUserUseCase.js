@@ -10,13 +10,19 @@ class RegisterUserUseCase {
     this.passwordService = passwordService;
   }
 
-  async execute({ email, password, role, actor, context }) {
+  async execute({ email, password, role, authUserId, context }) {
     console.log("[REGISTER] Iniciando registro", {
       email,
       role
     });
 
     try {
+      const actor = await this.userRepository.findById(authUserId);
+
+if (!actor) {
+  throw new Error("Usuário não encontrado");
+}
+
 
       // 🔐 AUTORIZAÇÃO PRIMEIRO
   if (!UserPolicy.canRegister(actor, context)) {
