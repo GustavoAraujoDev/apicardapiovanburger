@@ -1,4 +1,4 @@
-const ProductPolicy = require("../policies/ProductPolicy");
+const ProductPolicy = require("../../domain/policies/ProductPolicy");
 const Product = require("../../domain/entities/product");
 
 class DeleteProducts {
