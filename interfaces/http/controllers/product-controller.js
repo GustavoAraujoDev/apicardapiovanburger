@@ -19,6 +19,14 @@ const eventDispatcher = new EventDispatcher();
 class ProductController {
   async Registrer(req, res) {
     try {
+      const authUserId = req.user?.id; // 🔐 vem do JWT validado
+
+    if (!authUserId) {
+      return res.status(401).json({
+        error: "Não autenticado"
+      });
+    }
+      
       const { email, password, role } = req.body;
 
       // ✅ Validação básica (camada HTTP)
@@ -27,12 +35,20 @@ class ProductController {
           error: "Email e senha são obrigatórios"
         });
       }
+      const context = {
+      ip: req.ip,
+      userAgent: req.headers['user-agent'],
+      mfaValidated: true, // aqui viria de um MFA real
+      sessionAgeMinutes: 2
+    };
 
       const userRepo = new UserRepositoryMongo();
       const passwordService = new BcryptPasswordService();
       const registerUser = new RegisterUserUseCase(userRepo, passwordService);
 
       const user = await registerUser.execute({
+        authUserId,
+        context,
         email,
         password,
         role
