@@ -9,13 +9,19 @@ class RegisterUserUseCase {
     this.passwordService = passwordService;
   }
 
-  async execute({ email, password, role }) {
+  async execute({ email, password, role, actor, context }) {
     console.log("[REGISTER] Iniciando registro", {
       email,
       role
     });
 
     try {
+
+      // 🔐 AUTORIZAÇÃO PRIMEIRO
+  if (!UserPolicy.canRegister(actor, context)) {
+    throw new Error("Acesso negado");
+  }
+
       // 🔹 validação inicial
       if (!email || !password) {
         console.warn("[REGISTER] Dados obrigatórios ausentes", {
