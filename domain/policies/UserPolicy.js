@@ -11,6 +11,14 @@ class UserPolicy {
     );
   }
 
+  static canRegister(actor, context) {
+  return (
+    actor.status === 'active' &&
+    actor.role === 'ADMIN' &&
+    context.mfaValidated === true
+  );
+}
+
   /**
    * Exemplo: bloquear usuário
    */
