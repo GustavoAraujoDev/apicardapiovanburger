@@ -82,11 +82,12 @@ class User {
     this.touch();
 
     this.domainEvents.push(
-      new UserLoggedIn({
-        userId: this.id,
-        ip: context?.ip
-      })
-    );
+  new UserLoggedIn({
+    userId: this.id,
+    ip: context?.ip,
+    userAgent: context?.userAgent
+  })
+);
   }
 
   registerFailedLogin(maxAttempts = 5) {
@@ -106,11 +107,11 @@ class User {
     this.touch();
 
     this.domainEvents.push(
-      new UserBlocked({
-        userId: this.id,
-        reason
-      })
-    );
+  new UserBlocked({
+    userId: this.id,
+    reason
+  })
+);
   }
 
   unblock() {
