@@ -114,6 +114,28 @@ class AuditRepositoryMongo extends IAuditRepository {
       .limit(limit)
       .lean();
   }
+
+  async findAll({ page = 1, limit = 20 }) {
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      AuditModel
+        .find()
+        .sort({ occurredAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+
+      AuditModel.countDocuments()
+    ]);
+
+    return {
+      data,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit)
+    };
+  }
 }
 
 module.exports = AuditRepositoryMongo;
