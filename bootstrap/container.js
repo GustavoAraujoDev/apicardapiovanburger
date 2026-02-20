@@ -2,7 +2,7 @@
 
 const EventDispatcher = require("../infra/audit/EventDispatcher");
 const AuditLogHandler = require("../infra/audit/handler/AuditLogHandler");
-const AuditRepositoryMongo = require("../infra/repository/AuditRepositoryMongo");
+const AuditRepositoryMongo = require("../infra/repositories/AuditRepositoryMongo");
 
 const eventDispatcher = new EventDispatcher();
 const auditRepository = new AuditRepositoryMongo();
