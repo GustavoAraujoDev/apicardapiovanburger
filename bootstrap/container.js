@@ -1,7 +1,7 @@
 // src/bootstrap/container.js
 
 const EventDispatcher = require("../infra/audit/EventDispatcher");
-const AuditLogHandler = require("../infra/audit/handler/AuditLogHandler");
+const AuditLogHandler = require("../infra/audit/handlers/AuditLogHandler");
 const AuditRepositoryMongo = require("../infra/repositories/AuditRepositoryMongo");
 
 const eventDispatcher = new EventDispatcher();
