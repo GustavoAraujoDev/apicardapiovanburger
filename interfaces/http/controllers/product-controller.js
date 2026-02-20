@@ -218,7 +218,7 @@ class ProductController {
     const productRepo = new ProductRepositoryMongo();
     const userRepo = new UserRepositoryMongo();
 
-    const deleteProduct = new DeleteProducts(productRepo, userRepo);
+    const deleteProduct = new DeleteProducts(productRepo, userRepo, eventDispatcher);
 
     const result = await deleteProduct.execute({
       id,
