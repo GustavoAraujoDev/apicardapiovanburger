@@ -11,9 +11,7 @@ const JwtService = require("../auth/JwtService");
 const BcryptPasswordService = require("../security/BcryptPasswordService");
 const UserBlocked = require('../../../domain/events/UserBlocked');
 const UserLoggedIn = require('../../../domain/events/UserLoggedIn');
-const EventDispatcher = require('../../../infra/audit/EventDispatcher');
-// Events
-const eventDispatcher = new EventDispatcher();
+const { EventDispatcher } = require('../../../bootstrap/container');
 
 
 class ProductController {
@@ -138,8 +136,9 @@ class ProductController {
 
   try {
     // 🔹 Inicializa o repositório e caso de uso
+    const userRepo = new UserRepositoryMongo();
     const repo = new ProductRepositoryMongo();
-    const createProduct = new CreateProduct(repo);
+    const createProduct = new CreateProduct(repo, userRepo, eventDispatcher);
 
     // 🔹 Validação extra opcional antes de criar (pode ser útil para logs)
     if (!req.body || Object.keys(req.body).length === 0) {
