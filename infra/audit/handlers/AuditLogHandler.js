@@ -4,15 +4,41 @@ class AuditLogHandler {
   }
 
   async handle(event) {
-    await this.auditRepository.save({
-      event: event.constructor.name,
-      data: {
+    try {
+      const lastLog = await this.auditRepository.findLast();
+      const previousHash = lastLog?.hash || null;
+
+      const basePayload = {
+        event: event.constructor.name,
+        entity: event.entity,
+        entityId: event.entityId,
         userId: event.userId,
-        reason: event.reason
-      },
-      occurredAt: event.occurredAt
-    });
+        userEmail: event.userEmail,
+        status: event.status,
+        snapshot: event.snapshot || null,
+        errorMessage: event.errorMessage,
+        ip: event.context?.ip,
+        userAgent: event.context?.userAgent,
+        previousHash,
+        occurredAt: event.occurredAt
+      };
+
+      const hash = crypto
+        .createHash("sha256")
+        .update(JSON.stringify(basePayload))
+        .digest("hex");
+
+      await this.auditRepository.save({
+        ...basePayload,
+        hash
+      });
+
+    } catch (error) {
+      console.error("[AUDIT_HANDLER_ERROR]", error.message);
+      // nunca quebra o fluxo principal
+    }
   }
 }
+
 
 module.exports = AuditLogHandler;
