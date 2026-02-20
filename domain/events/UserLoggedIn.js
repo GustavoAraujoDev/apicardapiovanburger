@@ -1,8 +1,18 @@
 class UserLoggedIn {
-  constructor({ userId, ip }) {
-    this.name = 'UserLoggedIn';
+  constructor({ userId, ip, userAgent = null }) {
+    this.entity = "User";
+    this.entityId = userId;
+
     this.userId = userId;
-    this.ip = ip;
+    this.userEmail = null;
+
+    this.status = "SUCCESS";
+
+    this.context = {
+      ip,
+      userAgent
+    };
+
     this.occurredAt = new Date();
   }
 }
