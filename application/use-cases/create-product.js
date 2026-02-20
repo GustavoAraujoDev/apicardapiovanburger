@@ -1,6 +1,6 @@
 const Product = require("../../domain/entities/product");
 const ProductValidator = require("../../domain/entities/productvalidator");
-const ProductCreatedEvent = require("../../domain/events/ProductCreateEvent");
+const ProductCreatedEvent = require("../../domain/events/ProductCreatedEvent");
 
 class CreateProduct {
   constructor(productRepo, userRepo, eventDispatcher) {
