@@ -12,7 +12,7 @@ const BcryptPasswordService = require("../security/BcryptPasswordService");
 const UserBlocked = require('../../../domain/events/UserBlocked');
 const UserLoggedIn = require('../../../domain/events/UserLoggedIn');
 const { eventDispatcher } = require('../../../bootstrap/container');
-
+const ListAuditLogs = require("../../../application/use-cases/ListAuditLogs");
 
 class ProductController {
   async Registrer(req, res) {
@@ -262,6 +262,27 @@ class ProductController {
       return res.status(400).json({ error: error.message });
     }
   }
+
+  async listAudit(req, res) {
+  try {
+    const listAuditLogsUseCase = new ListAuditLogs(
+  auditRepository,
+  userRepo
+);
+    const result = await listAuditLogsUseCase.execute({
+      userId: req.user.id,
+      page: Number(req.query.page) || 1,
+      limit: Number(req.query.limit) || 20
+    });
+
+    return res.status(200).json(result);
+
+  } catch (error) {
+    return res.status(403).json({
+      error: error.message
+    });
+  }
+}
   // Métodos para update, delete e getById seguem o mesmo padrão.
 }
 
