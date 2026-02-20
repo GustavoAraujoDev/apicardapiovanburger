@@ -15,6 +15,8 @@ class AuditLogHandler {
         userId: event.userId,
         userEmail: event.userEmail,
         status: event.status,
+        oldData: event.oldData || null,
+        newData: event.newData || null,
         snapshot: event.snapshot || null,
         errorMessage: event.errorMessage,
         ip: event.context?.ip,
