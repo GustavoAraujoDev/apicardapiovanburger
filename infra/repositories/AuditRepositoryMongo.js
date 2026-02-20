@@ -61,7 +61,9 @@ AuditSchema.pre("deleteOne", function () {
   throw new Error("Audit logs cannot be deleted");
 });
 
-const AuditModel = auditConnection.model("Audit", AuditSchema);
+const AuditModel =
+  auditConnection.models.Audit ||
+  auditConnection.model("Audit", AuditSchema);
 
 // src/infrastructure/audit/MongoAuditRepository.js
 
