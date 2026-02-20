@@ -1,43 +1,71 @@
 const ProductPolicy = require("../../domain/policies/ProductPolicy");
 const Product = require("../../domain/entities/product");
+const ProductDeletedEvent = require("../../domain/events/ProductDeletedEvent");
 
 class DeleteProducts {
-  constructor(productRepo, userRepo) {
+  constructor(productRepo, userRepo, eventDispatcher) {
     this.productRepo = productRepo;
     this.userRepo = userRepo;
+    this.eventDispatcher = eventDispatcher;
   }
 
-  async execute({ id, userId }) {
+  async execute({ id, userId, context }) {
+    let productData = null;
+    let user = null;
 
-    // 🔎 1️⃣ Buscar usuário pelo ID do JWT
-    const user = await this.userRepo.findById(userId);
+    try {
+      // 🔎 1️⃣ Buscar usuário
+      user = await this.userRepo.findById(userId);
+      if (!user) throw new Error("Usuário não encontrado");
 
-    if (!user) {
-      throw new Error("Usuário não encontrado");
+      // 🔐 2️⃣ Autorização
+      ProductPolicy.canDelete(user);
+
+      // 📦 3️⃣ Buscar produto
+      productData = await this.productRepo.findById(id);
+      if (!productData) throw new Error("Produto não encontrado");
+
+      const product = new Product(productData);
+
+      // 🧠 4️⃣ Regra de domínio
+      product.canBeDeleted();
+
+      // 🗑 5️⃣ Exclusão
+      await this.productRepo.delete(id);
+
+      // ✅ Auditoria SUCCESS
+      await this.eventDispatcher.dispatch(
+        new ProductDeletedEvent({
+          entity: "Product",
+          entityId: id,
+          userId: user.id,
+          userEmail: user.email,
+          snapshot: productData,
+          status: "SUCCESS",
+          context
+        })
+      );
+
+      return { message: "Produto deletado com sucesso" };
+
+    } catch (error) {
+
+      // 🚫 Auditoria BLOCKED ou ERROR
+      await this.eventDispatcher.dispatch(
+        new ProductDeletedEvent({
+          entity: "Product",
+          entityId: id,
+          userId: user?.id,
+          userEmail: user?.email,
+          snapshot: productData,
+          status: error.message.includes("Usuário") ? "BLOCKED" : "ERROR",
+          context,
+          errorMessage: error.message
+        })
+      );
+
+      throw error;
     }
-
-    // 🔐 2️⃣ Autorização (Somente ADMIN)
-    ProductPolicy.canDelete(user);
-
-    // 📦 3️⃣ Buscar produto
-    const productData = await this.productRepo.findById(id);
-
-    if (!productData) {
-      throw new Error("Produto não encontrado");
-    }
-
-    // 🧠 4️⃣ Recriar entidade rica
-    const product = new Product(productData);
-
-    // 🧠 5️⃣ Regra de domínio
-    product.canBeDeleted();
-
-    // 🗑 6️⃣ Exclusão
-    await this.productRepo.delete(id);
-
-    return {
-      message: "Produto deletado com sucesso"
-    };
   }
 }
 
