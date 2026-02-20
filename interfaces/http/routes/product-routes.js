@@ -132,7 +132,7 @@ router.get("/", ProductController.getAll);
 
 /**
  * @swagger
- * /audit/logs:
+ * /products/audit/logs:
  *   get:
  *     summary: Listar logs de auditoria (ADMIN)
  *     tags: [Auditoria]
