@@ -47,9 +47,9 @@ class LoginUserUseCase {
     user.registerSuccessfulLogin(context);
     await this.userRepo.update(user);
 
-    await this.eventDispatcher.dispatchAll(
-      user.pullDomainEvents()
-    );
+    //await this.eventDispatcher.dispatchAll(
+    //  user.pullDomainEvents()
+    //);
 
     return {
       accessToken: this.tokenService.generateAccessToken(user),
