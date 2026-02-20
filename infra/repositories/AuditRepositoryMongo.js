@@ -67,7 +67,7 @@ const AuditModel = auditConnection.model("Audit", AuditSchema);
 
 const IAuditRepository = require("../../application/repository/IAuditRepository");
 
-class MongoAuditRepository extends IAuditRepository {
+class AuditRepositoryMongo extends IAuditRepository {
 
   async save(data) {
     try {
@@ -116,4 +116,4 @@ class MongoAuditRepository extends IAuditRepository {
   }
 }
 
-module.exports = MongoAuditRepository;
+module.exports = AuditRepositoryMongo;
