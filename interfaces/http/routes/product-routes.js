@@ -197,4 +197,82 @@ router.put(
  */
 router.delete("/:id", ProductController.delete);
 
+/**
+ * @swagger
+ * /audit/logs:
+ *   get:
+ *     summary: Listar logs de auditoria (ADMIN)
+ *     tags: [Auditoria]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *         required: false
+ *         description: Página da listagem
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           example: 20
+ *         required: false
+ *         description: Quantidade de registros por página
+ *     responses:
+ *       200:
+ *         description: Logs retornados com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       event:
+ *                         type: string
+ *                         example: ProductDeletedEvent
+ *                       entity:
+ *                         type: string
+ *                         example: Product
+ *                       entityId:
+ *                         type: string
+ *                         example: 65f2a8c9d91c2a0012ab3456
+ *                       userId:
+ *                         type: string
+ *                         example: 65f2a8c9d91c2a0012ab9999
+ *                       userEmail:
+ *                         type: string
+ *                         example: admin@email.com
+ *                       status:
+ *                         type: string
+ *                         example: SUCCESS
+ *                       ip:
+ *                         type: string
+ *                         example: 192.168.0.1
+ *                       occurredAt:
+ *                         type: string
+ *                         example: 2026-02-20T14:30:00.000Z
+ *                 total:
+ *                   type: integer
+ *                   example: 150
+ *                 page:
+ *                   type: integer
+ *                   example: 1
+ *                 totalPages:
+ *                   type: integer
+ *                   example: 8
+ *       403:
+ *         description: Acesso negado (não é ADMIN)
+ *       401:
+ *         description: Token inválido ou não informado
+ */
+router.get("/audit/logs", (req, res) =>
+  ProductController.listAudit(req, res)
+);
+
 module.exports = router;
