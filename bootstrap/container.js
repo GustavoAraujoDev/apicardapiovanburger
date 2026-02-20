@@ -13,6 +13,11 @@ eventDispatcher.register(
   new AuditLogHandler(auditRepository)
 );
 
+eventDispatcher.register(
+  "ProductCreateEvent",
+  new AuditLogHandler(auditRepository)
+);
+
 module.exports = {
   eventDispatcher,
   auditRepository
