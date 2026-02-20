@@ -271,8 +271,10 @@ class ProductController {
 
   async listAudit(req, res) {
   try {
+    const userRepo = new UserRepositoryMongo();
+    const AuditRepository = new AuditRepositoryMongo();
     const listAuditLogsUseCase = new ListAuditLogs(
-  auditRepository,
+  AuditRepository,
   userRepo
 );
     const result = await listAuditLogsUseCase.execute({
