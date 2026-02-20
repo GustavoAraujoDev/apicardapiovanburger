@@ -147,9 +147,25 @@ class ProductController {
       return res.status(400).json({ error: "O corpo da requisição está vazio" });
     }
 
-    // 🔹 Criação do produto
-    const product = await createProduct.execute(req.body);
+    // 🔐 Contexto de segurança (auditoria)
+    const context = {
+      ip: req.ip,
+      userAgent: req.headers["user-agent"],
+      deviceTrusted: true,
+      mfaValidated: false,
+      sessionAgeMinutes: 0,
+      time: {
+        isBusinessHours: true
+      }
+    };
 
+    const product = await createProductUseCase.execute({
+      productData: req.body,
+      userId: req.user.id,
+      context
+    });
+
+    conso
     // 🔹 Log de sucesso
     console.log("[ProductController.create] Produto criado com sucesso:", {
       productId: product._id,
