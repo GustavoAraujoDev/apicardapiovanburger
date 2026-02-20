@@ -46,7 +46,10 @@ const jwtService = new JwtService();
  *       401:
  *         description: Credenciais inválidas
  */
-router.post("/auth/login", (req, res) => ProductController.login(req, res));
+  router.post("/auth/login", (req, res) => {
+  console.log("🔥 LOGIN REALMENTE FOI CHAMADO");
+  return ProductController.login(req, res);
+});
 
 /**
  * @swagger
