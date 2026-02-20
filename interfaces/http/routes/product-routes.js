@@ -129,76 +129,6 @@ router.get("/", ProductController.getAll);
 
 /**
  * @swagger
- * /products/{id}:
- *   get:
- *     summary: Buscar produto por ID
- *     tags: [Produtos]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Produto encontrado
- */
-router.get("/:id", ProductController.findById);
-
-/**
- * @swagger
- * /products/{id}:
- *   put:
- *     summary: Atualizar produto
- *     tags: [Produtos]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Product'
- *     responses:
- *       200:
- *         description: Produto atualizado com sucesso
- */
-router.put(
-  "/:id",
-  validateRequest(ProductValidator.update),
-  ProductController.update
-);
-
-/**
- * @swagger
- * /products/{id}:
- *   delete:
- *     summary: Deletar produto
- *     tags: [Produtos]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       204:
- *         description: Produto deletado
- */
-router.delete("/:id", ProductController.delete);
-
-/**
- * @swagger
  * /audit/logs:
  *   get:
  *     summary: Listar logs de auditoria (ADMIN)
@@ -274,5 +204,77 @@ router.delete("/:id", ProductController.delete);
 router.get("/audit/logs", (req, res) =>
   ProductController.listAudit(req, res)
 );
+
+/**
+ * @swagger
+ * /products/{id}:
+ *   get:
+ *     summary: Buscar produto por ID
+ *     tags: [Produtos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Produto encontrado
+ */
+router.get("/:id", ProductController.findById);
+
+/**
+ * @swagger
+ * /products/{id}:
+ *   put:
+ *     summary: Atualizar produto
+ *     tags: [Produtos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
+ *     responses:
+ *       200:
+ *         description: Produto atualizado com sucesso
+ */
+router.put(
+  "/:id",
+  validateRequest(ProductValidator.update),
+  ProductController.update
+);
+
+/**
+ * @swagger
+ * /products/{id}:
+ *   delete:
+ *     summary: Deletar produto
+ *     tags: [Produtos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Produto deletado
+ */
+router.delete("/:id", ProductController.delete);
+
+
 
 module.exports = router;
