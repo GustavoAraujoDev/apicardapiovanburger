@@ -1,8 +1,18 @@
 class UserBlocked {
   constructor({ userId, reason }) {
-    this.name = 'UserBlocked';
+    this.entity = "User";
+    this.entityId = userId;
+
     this.userId = userId;
+    this.userEmail = null;
+
+    this.status = "BLOCKED";
+
     this.reason = reason;
+    this.errorMessage = reason;
+
+    this.context = null;
+
     this.occurredAt = new Date();
   }
 }
