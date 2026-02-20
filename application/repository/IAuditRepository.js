@@ -22,6 +22,10 @@ class IAuditRepository {
   async findByFilters(filters) {
     throw new Error("Method not implemented");
   }
+
+  async findAll({ page, limit }) {
+    throw new Error("Method not implemented");
+  }
 }
 
 module.exports = IAuditRepository;
