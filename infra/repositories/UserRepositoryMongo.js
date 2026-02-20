@@ -99,8 +99,9 @@ class UserRepositoryMongo extends UserRepository {
 }
 
   async findById(id) {
-    const doc = await UserModel.findById({ id }).lean();
+    const userId = typeof id === "string" ? id : id.id; // garante string se receber objeto
 
+  const doc = await UserModel.findOne({ id: userId }).lean(); // ⚡ aqui é findOne({ id })
     if (!doc) return null;
 
     return new User(
