@@ -88,7 +88,7 @@ class ProductController {
   ip: req.ip,
   userAgent: req.headers['user-agent'],
   deviceTrusted: true,        // vindo de um DeviceService
-  mfaValidated: false,        // ou true se validado
+  mfaValidated: true,        // ou true se validado
   sessionAgeMinutes: 0,
   time: {
     isBusinessHours: () => true
