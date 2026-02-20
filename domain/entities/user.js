@@ -73,9 +73,6 @@ class User {
      ========================== */
 
   registerSuccessfulLogin(context) {
-    if (!this.canLogin()) {
-      throw new Error('User is not allowed to login');
-    }
 
     this.loginAttempts = 0;
     this.lastLoginAt = new Date();
