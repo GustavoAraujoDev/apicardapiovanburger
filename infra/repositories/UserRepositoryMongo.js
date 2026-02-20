@@ -99,7 +99,7 @@ class UserRepositoryMongo extends UserRepository {
 }
 
   async findById(id) {
-    const doc = await UserModel.findById(id).lean();
+    const doc = await UserModel.findById({ id }).lean();
 
     if (!doc) return null;
 
