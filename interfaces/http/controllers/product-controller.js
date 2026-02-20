@@ -158,7 +158,7 @@ class ProductController {
       }
     };
 
-    const product = await createProductUseCase.execute({
+    const product = await createProduct.execute({
       productData: req.body,
       userId: req.user.id,
       context
@@ -218,10 +218,14 @@ class ProductController {
     const userRepo = new UserRepositoryMongo();
 
     const deleteProduct = new DeleteProducts(productRepo, userRepo, eventDispatcher);
-
+    const context = {
+  ip: req.ip,
+  userAgent: req.headers["user-agent"]
+};
     const result = await deleteProduct.execute({
       id,
-      userId
+      userId,
+      context
     });
 
     return res.status(200).json(result);
