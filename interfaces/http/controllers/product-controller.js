@@ -11,7 +11,7 @@ const JwtService = require("../auth/JwtService");
 const BcryptPasswordService = require("../security/BcryptPasswordService");
 const UserBlocked = require('../../../domain/events/UserBlocked');
 const UserLoggedIn = require('../../../domain/events/UserLoggedIn');
-const { EventDispatcher } = require('../../../bootstrap/container');
+const { eventDispatcher } = require('../../../bootstrap/container');
 
 
 class ProductController {
