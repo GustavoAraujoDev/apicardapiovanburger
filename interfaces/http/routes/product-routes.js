@@ -86,7 +86,7 @@ router.post("/auth/registrar", (req, res) => ProductController.Registrer(req, re
 /* =========================
    MIDDLEWARE DE AUTENTICAÇÃO
 ========================= */
-router.use(AuthMiddleware(jwtService));
+//router.use(AuthMiddleware(jwtService));
 
 /* =========================
    ROTAS PROTEGIDAS
