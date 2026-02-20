@@ -1,3 +1,5 @@
+const crypto = require("crypto");
+
 class AuditLogHandler {
   constructor(auditRepository) {
     this.auditRepository = auditRepository;
