@@ -109,7 +109,7 @@ class UserRepositoryMongo extends UserRepository {
       doc.email,
       doc.passwordHash,
       doc.role,
-      doc.active
+      doc.status
     );
   }
 }
