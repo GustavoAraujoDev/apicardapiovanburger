@@ -164,7 +164,6 @@ class ProductController {
       context
     });
 
-    conso
     // 🔹 Log de sucesso
     console.log("[ProductController.create] Produto criado com sucesso:", {
       productId: product._id,
