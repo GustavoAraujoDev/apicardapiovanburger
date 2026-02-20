@@ -122,8 +122,8 @@ class ProductController {
 
     return res.status(500).json({
       error: "Erro interno ao realizar login",
-      message: err.message,   // ✅ aqui
-      stack: err.stack        // opcional, só pra debug
+      message: error.message,   // ✅ aqui
+      stack: error.stack        // opcional, só pra debug
     });
   }
 }
