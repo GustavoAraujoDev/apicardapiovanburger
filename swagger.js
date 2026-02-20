@@ -21,7 +21,7 @@ Documentação gerada automaticamente via JSDoc.
 
     servers: [
       {
-        url: 'https://apicardapiovanburger.onrender.com',
+        url: 'https://gestaoapipro.onrender.com',
         description: 'Produção'
       },
       {
