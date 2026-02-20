@@ -7,15 +7,28 @@ const AuditRepositoryMongo = require("../infra/repositories/AuditRepositoryMongo
 const eventDispatcher = new EventDispatcher();
 const auditRepository = new AuditRepositoryMongo();
 
-// 🔥 Registrar handlers
+const auditHandler = new AuditLogHandler(auditRepository);
+
+// 🔥 Product Events
 eventDispatcher.register(
   "ProductDeletedEvent",
-  new AuditLogHandler(auditRepository)
+  auditHandler
 );
 
 eventDispatcher.register(
-  "ProductCreateEvent",
-  new AuditLogHandler(auditRepository)
+  "ProductCreatedEvent",
+  auditHandler
+);
+
+// 🔥 User Events
+eventDispatcher.register(
+  "UserBlocked",
+  auditHandler
+);
+
+eventDispatcher.register(
+  "UserLoggedIn",
+  auditHandler
 );
 
 module.exports = {
