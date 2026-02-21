@@ -314,6 +314,67 @@ router.post(
 
 /**
  * @swagger
+ * /products/{id}/addstock:
+ *   patch:
+ *     summary: Adicionar estoque ao produto
+ *     description: Adiciona uma quantidade ao estoque atual do produto e registra evento de auditoria.
+ *     tags: [Produtos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID do produto
+ *         schema:
+ *           type: string
+ *           example: "64f1c9d2a8f4b2a1c9e12345"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - quantity
+ *             properties:
+ *               quantity:
+ *                 type: number
+ *                 example: 10
+ *                 description: Quantidade a ser adicionada ao estoque
+ *     responses:
+ *       200:
+ *         description: Estoque atualizado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   example: "64f1c9d2a8f4b2a1c9e12345"
+ *                 name:
+ *                   type: string
+ *                   example: "Produto X"
+ *                 stock:
+ *                   type: number
+ *                   example: 50
+ *       401:
+ *         description: Usuário não autenticado
+ *       422:
+ *         description: Quantidade inválida
+ *       404:
+ *         description: Produto não encontrado
+ *       500:
+ *         description: Erro interno do servidor
+ */
+router.patch(
+  "/:id/addstock",
+  ProductController.addStock
+);
+
+/**
+ * @swagger
  * /products/{id}:
  *   get:
  *     summary: Buscar produto por ID
