@@ -6,6 +6,7 @@ const Productsupdate = require("../../../application/use-cases/update-product");
 const LoginUserUseCase = require("../../../application/use-cases/auth/LoginUserUseCase");
 const RegisterUserUseCase = require("../../../application/use-cases/RegisterUserUseCase");
 const ListUsersUseCase = require("../../../application/use-cases/ListUsersUseCase");
+const ProductShell = require("../../../application/use-cases/ProductShell");
 const { ProductRepositoryMongo } = require("../../../infra/repositories/productRepositoryMongo");
 const AuditRepositoryMongo = require("../../../infra/repositories/AuditRepositoryMongo")
 const { UserRepositoryMongo } = require("../../../infra/repositories/UserRepositoryMongo");
@@ -17,6 +18,40 @@ const { eventDispatcher } = require('../../../bootstrap/container');
 const ListAuditLogs = require("../../../application/use-cases/ListAuditLogs");
 
 class ProductController {
+  async shell(req, res) {
+    try {
+      const { id } = req.params;
+      const { quantity } = req.body;
+
+      const userId = req.user.id;
+
+      const context = {
+        ip: req.ip,
+        userAgent: req.headers["user-agent"]
+      };
+
+    const userRepo = new UserRepositoryMongo();
+    const repo = new ProductRepositoryMongo();
+    const productShell = new CreateProduct(repo, userRepo, eventDispatcher);
+
+      const result = await productShell.execute({
+        productId: id,
+        quantity,
+        userId,
+        context
+      });
+
+      return res.status(200).json(result);
+
+    } catch (error) {
+      return res.status(400).json({
+        error: error.message,
+        message: error.message,   // ✅ aqui
+        stack: error.stack 
+      });
+    }
+  }
+  
   async Registrer(req, res) {
     try {
       const authUserId = req.user?.id; // 🔐 vem do JWT validado
