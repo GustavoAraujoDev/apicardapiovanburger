@@ -71,7 +71,7 @@ Documentação gerada automaticamente via JSDoc.
       items: { type: 'string', example: 'M' }
     },
     stock: { type: 'number', example: 50 },
-    status: { type: 'string', example: 'ativo' },
+    status: { type: 'string', example: 'active' },
     priceHistory: {
       type: 'array',
       items: { type: 'object' },
