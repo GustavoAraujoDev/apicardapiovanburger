@@ -1,4 +1,4 @@
-const Product = require("../../domain/entities/Product");
+const Product = require("../../domain/entities/product");
 const ProductPolicy = require("../../domain/policies/ProductPolicy");
 const ProductSoldEvent = require("../../domain/events/ProductSoldEvent");
 
