@@ -306,7 +306,8 @@ class ProductController {
       return res.status(200).json(users);
     } catch (error) {
       console.error("Erro ao listar usuários:", error);
-      return res.status(500).json({ error: "Erro interno do servidor" });
+      return res.status(500).json({ error: "Erro interno do servidor", message: error.message,   // ✅ aqui
+      stack: error.stack   });
     }
   }
   // Métodos para update, delete e getById seguem o mesmo padrão.
