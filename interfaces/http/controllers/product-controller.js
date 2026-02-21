@@ -19,38 +19,74 @@ const ListAuditLogs = require("../../../application/use-cases/ListAuditLogs");
 
 class ProductController {
   async sell(req, res) {
-    try {
-      const { id } = req.params;
-      const { quantity } = req.body;
+  console.log("====================================");
+  console.log("🔥 [SELL] ROTA CHAMADA");
+  console.log("📅 Data:", new Date().toISOString());
+  console.log("📌 Params:", req.params);
+  console.log("📦 Body:", req.body);
+  console.log("👤 User:", req.user);
+  console.log("🌍 IP:", req.ip);
+  console.log("🖥 UserAgent:", req.headers["user-agent"]);
+  console.log("====================================");
 
-      const userId = req.user.id;
+  try {
+    const { id } = req.params;
+    const { quantity } = req.body;
 
-      const context = {
-        ip: req.ip,
-        userAgent: req.headers["user-agent"]
-      };
+    if (!req.user) {
+      console.error("❌ req.user está undefined");
+      return res.status(401).json({ error: "Usuário não autenticado" });
+    }
 
+    const userId = req.user.id;
+
+    if (!quantity || Number(quantity) <= 0) {
+      console.error("❌ Quantidade inválida:", quantity);
+      return res.status(422).json({ error: "Quantidade inválida" });
+    }
+
+    const context = {
+      ip: req.ip,
+      userAgent: req.headers["user-agent"]
+    };
+
+    console.log("🔎 Criando repositórios...");
     const userRepo = new UserRepositoryMongo();
     const repo = new ProductRepositoryMongo();
+
+    if (!eventDispatcher) {
+      console.error("❌ eventDispatcher está undefined");
+    }
+
+    console.log("🚀 Executando use case SellProduct...");
+
     const sellProduct = new SellProduct(repo, userRepo, eventDispatcher);
 
-      const result = await sellProduct.execute({
-        productId: id,
-        quantity,
-        userId,
-        context
-      });
+    const result = await sellProduct.execute({
+      productId: id,
+      quantity: Number(quantity),
+      userId,
+      context
+    });
 
-      return res.status(200).json(result);
+    console.log("✅ Venda realizada com sucesso:", result);
 
-    } catch (error) {
-      return res.status(400).json({
-        error: error.message,
-        message: error.message,   // ✅ aqui
-        stack: error.stack 
-      });
-    }
+    return res.status(200).json(result);
+
+  } catch (error) {
+    console.error("====================================");
+    console.error("💥 ERRO NO SELL");
+    console.error("Mensagem:", error.message);
+    console.error("Stack:", error.stack);
+    console.error("====================================");
+
+    return res.status(500).json({
+      error: "Erro interno ao realizar venda",
+      message: error.message,   // ✅ aqui
+      stack: error.stack 
+    });
   }
+}
   
   async Registrer(req, res) {
     try {
