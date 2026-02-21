@@ -86,7 +86,7 @@ router.post("/auth/registrar", (req, res) => ProductController.Registrer(req, re
 /* =========================
    MIDDLEWARE DE AUTENTICAÇÃO
 ========================= */
-//router.use(AuthMiddleware(jwtService));
+router.use(AuthMiddleware(jwtService));
 
 /* =========================
    ROTAS PROTEGIDAS
@@ -129,6 +129,58 @@ router.post(
  *         description: Lista de produtos
  */
 router.get("/", ProductController.getAll);
+
+/**
+ * @swagger
+ * tags:
+ *   name: Usuários
+ *   description: Gestão de usuários
+ */
+
+/**
+ * @swagger
+ * /products/users/list:
+ *   get:
+ *     summary: Listar todos os usuários
+ *     tags: [Usuários]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de usuários
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *                   role:
+ *                     type: string
+ *                   status:
+ *                     type: string
+ *                   loginAttempts:
+ *                     type: integer
+ *                   lastLoginAt:
+ *                     type: string
+ *                     format: date-time
+ *                   blockedAt:
+ *                     type: string
+ *                     format: date-time
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                   updatedAt:
+ *                     type: string
+ *                     format: date-time
+ *       500:
+ *         description: Erro interno do servidor
+ */
+router.get("/users/list", ProductController.listAll);
 
 /**
  * @swagger
