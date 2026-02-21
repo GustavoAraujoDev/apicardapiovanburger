@@ -44,9 +44,12 @@ const UserSchema = new mongoose.Schema(
 const UserModel = mongoose.model("User", UserSchema);
 
 
-
-
+// ------------------------
+// Repositório MongoDB
+// ------------------------
 class UserRepositoryMongo extends UserRepository {
+
+  // Salvar usuário
   async save(user) {
     await UserModel.create({
       id: user.id,
@@ -62,65 +65,70 @@ class UserRepositoryMongo extends UserRepository {
     });
   }
 
+  // Buscar usuário por email
   async findByEmail(email) {
-  const doc = await UserModel.findOne({ email }).lean();
-  if (!doc) return null;
-
-  return new User({
-    id: doc.id.toString(),
-    email: doc.email,
-    passwordHash: doc.passwordHash,
-    role: doc.role,
-    status: doc.status ?? 'active',
-    loginAttempts: doc.loginAttempts ?? 0,
-    lastLoginAt: doc.lastLoginAt ?? null,
-    blockedAt: doc.blockedAt ?? null,
-    createdAt: doc.createdAt,
-    updatedAt: doc.updatedAt
-  });
-}
-
-  async update(user) {
-  await UserModel.updateOne(
-    { id: user.id },
-    {
-      $set: {
-        status: user.status,
-        lastLoginAt: user.lastLoginAt,
-        blockedAt: user.blockedAt,
-        updatedAt: user.updatedAt
-      },
-      $setOnInsert: undefined,
-      $set: {
-        loginAttempts: user.loginAttempts
-      }
-    }
-  );
-}
-
-  async findById(id) {
-    const userId = typeof id === "string" ? id : id.id; // garante string se receber objeto
-
-  const doc = await UserModel.findOne({ id: userId }).lean(); // ⚡ aqui é findOne({ id })
+    const doc = await UserModel.findOne({ email }).lean();
     if (!doc) return null;
 
-    return new User(
-      doc.id.toString(),
-      doc.email,
-      doc.passwordHash,
-      doc.role,
-      doc.status
-    );
+    return new User({
+      id: doc.id.toString(),
+      email: doc.email,
+      passwordHash: doc.passwordHash,
+      role: doc.role,
+      status: doc.status ?? "active",
+      loginAttempts: doc.loginAttempts ?? 0,
+      lastLoginAt: doc.lastLoginAt ?? null,
+      blockedAt: doc.blockedAt ?? null,
+      createdAt: doc.createdAt,
+      updatedAt: doc.updatedAt
+    });
+  }
 
-    // ✅ Listar todos os usuários
+  // Buscar usuário por ID
+  async findById(id) {
+    const userId = typeof id === "string" ? id : id.id;
+    const doc = await UserModel.findOne({ id: userId }).lean();
+    if (!doc) return null;
+
+    return new User({
+      id: doc.id.toString(),
+      email: doc.email,
+      passwordHash: doc.passwordHash,
+      role: doc.role,
+      status: doc.status ?? "active",
+      loginAttempts: doc.loginAttempts ?? 0,
+      lastLoginAt: doc.lastLoginAt ?? null,
+      blockedAt: doc.blockedAt ?? null,
+      createdAt: doc.createdAt,
+      updatedAt: doc.updatedAt
+    });
+  }
+
+  // Atualizar usuário
+  async update(user) {
+    await UserModel.updateOne(
+      { id: user.id },
+      {
+        $set: {
+          status: user.status,
+          lastLoginAt: user.lastLoginAt,
+          blockedAt: user.blockedAt,
+          loginAttempts: user.loginAttempts,
+          updatedAt: user.updatedAt
+        }
+      }
+    );
+  }
+
+  // Listar todos os usuários
   async findAll() {
-    const docs = await UserModel.find({}).lean(); // busca todos
+    const docs = await UserModel.find({}).lean();
     return docs.map(doc => new User({
       id: doc.id.toString(),
       email: doc.email,
       passwordHash: doc.passwordHash,
       role: doc.role,
-      status: doc.status ?? 'active',
+      status: doc.status ?? "active",
       loginAttempts: doc.loginAttempts ?? 0,
       lastLoginAt: doc.lastLoginAt ?? null,
       blockedAt: doc.blockedAt ?? null,
