@@ -51,6 +51,11 @@ const jwtService = new JwtService();
   return ProductController.login(req, res);
 });
 
+/* =========================
+   MIDDLEWARE DE AUTENTICAÇÃO
+========================= */
+router.use(AuthMiddleware(jwtService));
+
 /**
  * @swagger
  * /products/auth/registrar:
@@ -82,11 +87,6 @@ const jwtService = new JwtService();
  *         description: Usuário criado com sucesso
  */
 router.post("/auth/registrar", (req, res) => ProductController.Registrer(req, res));
-
-/* =========================
-   MIDDLEWARE DE AUTENTICAÇÃO
-========================= */
-router.use(AuthMiddleware(jwtService));
 
 /* =========================
    ROTAS PROTEGIDAS
