@@ -16,6 +16,11 @@ eventDispatcher.register(
 );
 
 eventDispatcher.register(
+  "ProductSoldEvent",
+  auditHandler
+);
+
+eventDispatcher.register(
   "ProductCreatedEvent",
   auditHandler
 );
