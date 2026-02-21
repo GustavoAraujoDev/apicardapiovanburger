@@ -129,6 +129,5 @@ class UserRepositoryMongo extends UserRepository {
     }));
   }
 }
-}
 
 module.exports = { UserRepositoryMongo, UserModel };
