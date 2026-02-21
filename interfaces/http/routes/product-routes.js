@@ -309,7 +309,7 @@ router.get("/audit/logs", (req, res) =>
  */
 router.post(
   "/:id/sell",
-  (req, res) => productController.sell(req, res)
+  (req, res) => ProductController.sell(req, res)
 );
 
 /**
