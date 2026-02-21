@@ -111,7 +111,24 @@ class UserRepositoryMongo extends UserRepository {
       doc.role,
       doc.status
     );
+
+    // ✅ Listar todos os usuários
+  async findAll() {
+    const docs = await UserModel.find({}).lean(); // busca todos
+    return docs.map(doc => new User({
+      id: doc.id.toString(),
+      email: doc.email,
+      passwordHash: doc.passwordHash,
+      role: doc.role,
+      status: doc.status ?? 'active',
+      loginAttempts: doc.loginAttempts ?? 0,
+      lastLoginAt: doc.lastLoginAt ?? null,
+      blockedAt: doc.blockedAt ?? null,
+      createdAt: doc.createdAt,
+      updatedAt: doc.updatedAt
+    }));
   }
+}
 }
 
 module.exports = { UserRepositoryMongo, UserModel };
