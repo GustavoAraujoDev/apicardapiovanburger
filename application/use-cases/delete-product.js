@@ -18,14 +18,13 @@ class DeleteProducts {
       user = await this.userRepo.findById(userId);
       if (!user) throw new Error("Usuário não encontrado");
 
-      // 🔐 2️⃣ Autorização
-      ProductPolicy.canDelete(user);
-
       // 📦 3️⃣ Buscar produto
       productData = await this.productRepo.findById(id);
       if (!productData) throw new Error("Produto não encontrado");
 
-      const product = new Product(productData);
+         const product = new Product(productData);
+      // 🔐 2️⃣ Autorização
+      ProductPolicy.canDelete({ user, product });
 
       // 🧠 4️⃣ Regra de domínio
       product.canBeDeleted();
