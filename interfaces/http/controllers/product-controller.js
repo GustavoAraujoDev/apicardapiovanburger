@@ -6,7 +6,7 @@ const Productsupdate = require("../../../application/use-cases/update-product");
 const LoginUserUseCase = require("../../../application/use-cases/auth/LoginUserUseCase");
 const RegisterUserUseCase = require("../../../application/use-cases/RegisterUserUseCase");
 const ListUsersUseCase = require("../../../application/use-cases/ListUsersUseCase");
-const ProductShell = require("../../../application/use-cases/ProductShell");
+const SellProduct = require("../../../application/use-cases/SellProduct");
 const { ProductRepositoryMongo } = require("../../../infra/repositories/productRepositoryMongo");
 const AuditRepositoryMongo = require("../../../infra/repositories/AuditRepositoryMongo")
 const { UserRepositoryMongo } = require("../../../infra/repositories/UserRepositoryMongo");
@@ -18,7 +18,7 @@ const { eventDispatcher } = require('../../../bootstrap/container');
 const ListAuditLogs = require("../../../application/use-cases/ListAuditLogs");
 
 class ProductController {
-  async shell(req, res) {
+  async sell(req, res) {
     try {
       const { id } = req.params;
       const { quantity } = req.body;
@@ -32,9 +32,9 @@ class ProductController {
 
     const userRepo = new UserRepositoryMongo();
     const repo = new ProductRepositoryMongo();
-    const productShell = new CreateProduct(repo, userRepo, eventDispatcher);
+    const sellProduct = new SellProduct(repo, userRepo, eventDispatcher);
 
-      const result = await productShell.execute({
+      const result = await sellProduct.execute({
         productId: id,
         quantity,
         userId,
