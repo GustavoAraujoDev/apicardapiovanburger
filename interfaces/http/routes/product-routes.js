@@ -308,7 +308,7 @@ router.get("/audit/logs", (req, res) =>
  *         description: Usuário sem permissão
  */
 router.post(
-  "/products/:id/sell",
+  "/:id/sell",
   (req, res) => productController.sell(req, res)
 );
 
