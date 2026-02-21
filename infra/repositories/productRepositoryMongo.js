@@ -85,9 +85,41 @@ class ProductRepositoryMongo extends ProductRepository {
    * @return {*} 
    * @memberof ProductRepository
    */
-  async update(id, productData) {
-    return await ProductModel.findByIdAndUpdate(id, productData, { new: true });
-  }
+  async update(product) {
+  const updated = await ProductModel.findByIdAndUpdate(
+    product.id, // domínio usa id
+    {
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      stock: product.stock,
+      status: product.status,
+      images: product.images,
+      category: product.category,
+      colors: product.colors,
+      tamanhos: product.tamanhos,
+      priceHistory: product.priceHistory
+    },
+    { new: true }
+  ).lean();
+
+  if (!updated) return null;
+
+  // 🔥 Mantém o mesmo padrão do findById
+  return {
+    id: updated._id.toString(),
+    name: updated.name,
+    description: updated.description,
+    price: updated.price,
+    stock: updated.stock,
+    status: updated.status,
+    images: updated.images,
+    category: updated.category,
+    colors: updated.colors,
+    tamanhos: updated.tamanhos,
+    priceHistory: updated.priceHistory
+  };
+}
 
   /**
    *
