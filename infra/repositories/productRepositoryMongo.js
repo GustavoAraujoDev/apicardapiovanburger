@@ -54,8 +54,24 @@ class ProductRepositoryMongo extends ProductRepository {
    * @memberof ProductRepository
    */
   async findById(id) {
-    return await ProductModel.findById(id);
-  }
+  const product = await ProductModel.findById(id).lean();
+
+  if (!product) return null;
+
+  return {
+    id: product._id.toString(),
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    stock: product.stock,
+    status: product.status,
+    images: product.images,
+    category: product.category,
+    colors: product.colors,
+    tamanhos: product.tamanhos,
+    priceHistory: product.priceHistory
+  };
+}
 
   async findByEmail(email) {
     return await ProductModel.findOne({ email });
