@@ -262,6 +262,58 @@ router.get("/audit/logs", (req, res) =>
 
 /**
  * @swagger
+ * /products/{id}/sell:
+ *   post:
+ *     summary: Realizar venda de um produto
+ *     description: Remove quantidade do estoque do produto (venda)
+ *     tags: [Produtos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID do produto
+ *         schema:
+ *           type: string
+ *           example: 64f9b0c2a12e4f8d9c123456
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - quantity
+ *             properties:
+ *               quantity:
+ *                 type: integer
+ *                 example: 2
+ *     responses:
+ *       200:
+ *         description: Venda realizada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Venda realizada com sucesso
+ *       400:
+ *         description: Erro de validação ou regra de negócio
+ *       401:
+ *         description: Usuário não autenticado
+ *       403:
+ *         description: Usuário sem permissão
+ */
+router.post(
+  "/products/:id/sell",
+  (req, res) => productController.sell(req, res)
+);
+
+/**
+ * @swagger
  * /products/{id}:
  *   get:
  *     summary: Buscar produto por ID
