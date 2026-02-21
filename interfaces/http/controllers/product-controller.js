@@ -5,6 +5,7 @@ const DeleteProducts = require("../../../application/use-cases/delete-product");
 const Productsupdate = require("../../../application/use-cases/update-product");
 const LoginUserUseCase = require("../../../application/use-cases/auth/LoginUserUseCase");
 const RegisterUserUseCase = require("../../../application/use-cases/RegisterUserUseCase");
+const ListUsersUseCase = require("../../../application/use-cases/ListUsersUseCase");
 const { ProductRepositoryMongo } = require("../../../infra/repositories/productRepositoryMongo");
 const AuditRepositoryMongo = require("../../../infra/repositories/AuditRepositoryMongo")
 const { UserRepositoryMongo } = require("../../../infra/repositories/UserRepositoryMongo");
@@ -291,6 +292,23 @@ class ProductController {
     });
   }
 }
+
+   /**
+   * Listar todos os usuários
+   * @param {*} req 
+   * @param {*} res 
+   */
+  async listAll(req, res) {
+    try {
+      const userRepo = new UserRepositoryMongo();
+      const listUsersUseCase = new ListUsersUseCase(userRepo);
+      const users = await listUsersUseCase.execute();
+      return res.status(200).json(users);
+    } catch (error) {
+      console.error("Erro ao listar usuários:", error);
+      return res.status(500).json({ error: "Erro interno do servidor" });
+    }
+  }
   // Métodos para update, delete e getById seguem o mesmo padrão.
 }
 
