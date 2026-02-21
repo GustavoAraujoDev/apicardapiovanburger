@@ -7,6 +7,7 @@ const LoginUserUseCase = require("../../../application/use-cases/auth/LoginUserU
 const RegisterUserUseCase = require("../../../application/use-cases/RegisterUserUseCase");
 const ListUsersUseCase = require("../../../application/use-cases/ListUsersUseCase");
 const SellProduct = require("../../../application/use-cases/SellProduct");
+const StockAddProduct = require("../../../application/use-cases/StockAddProduct");
 const { ProductRepositoryMongo } = require("../../../infra/repositories/productRepositoryMongo");
 const AuditRepositoryMongo = require("../../../infra/repositories/AuditRepositoryMongo")
 const { UserRepositoryMongo } = require("../../../infra/repositories/UserRepositoryMongo");
@@ -18,6 +19,76 @@ const { eventDispatcher } = require('../../../bootstrap/container');
 const ListAuditLogs = require("../../../application/use-cases/ListAuditLogs");
 
 class ProductController {
+async addStock(req, res) {
+  console.log("====================================");
+  console.log("🔥 [ADD STOCK] ROTA CHAMADA");
+  console.log("📅 Data:", new Date().toISOString());
+  console.log("📌 Params:", req.params);
+  console.log("📦 Body:", req.body);
+  console.log("👤 User:", req.user);
+  console.log("🌍 IP:", req.ip);
+  console.log("🖥 UserAgent:", req.headers["user-agent"]);
+  console.log("====================================");
+
+  try {
+    const { id } = req.params;
+    const { quantity } = req.body;
+
+    if (!req.user) {
+      console.error("❌ req.user está undefined");
+      return res.status(401).json({ error: "Usuário não autenticado" });
+    }
+
+    const userId = req.user.id;
+
+    if (!quantity || Number(quantity) <= 0) {
+      console.error("❌ Quantidade inválida:", quantity);
+      return res.status(422).json({ error: "Quantidade inválida" });
+    }
+
+    const context = {
+      ip: req.ip,
+      userAgent: req.headers["user-agent"]
+    };
+
+    console.log("🔎 Criando repositórios...");
+    const userRepo = new UserRepositoryMongo();
+    const repo = new ProductRepositoryMongo();
+
+    if (!eventDispatcher) {
+      console.error("❌ eventDispatcher está undefined");
+    }
+
+    console.log("🚀 Executando use case SellProduct...");
+
+    const stockAddProduct = new StockAddProduct(repo, userRepo, eventDispatcher);
+
+    const result = await stockAddProduct.execute({
+      productId: id,
+      quantity: Number(quantity),
+      userId,
+      context
+    });
+
+    console.log("✅ stock atualizado com sucesso:", result);
+
+    return res.status(200).json(result);
+
+  } catch (error) {
+    console.error("====================================");
+    console.error("💥 ERRO NO ADD STOCK");
+    console.error("Mensagem:", error.message);
+    console.error("Stack:", error.stack);
+    console.error("====================================");
+
+    return res.status(500).json({
+      error: "Erro interno ao realizar venda",
+      message: error.message,   // ✅ aqui
+      stack: error.stack 
+    });
+  }
+}
+  
   async sell(req, res) {
   console.log("====================================");
   console.log("🔥 [SELL] ROTA CHAMADA");
