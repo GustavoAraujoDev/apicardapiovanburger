@@ -6,6 +6,7 @@ class ProductStockAddedEvent {
     userEmail,
     oldData,
     newData,
+    snapshot,
     status,
     context,
     errorMessage = null
@@ -18,6 +19,7 @@ class ProductStockAddedEvent {
     this.oldData = oldData;
     this.newData = newData;
 
+    this.snapshot = snapshot;
     this.status = status;
     this.context = context;
     this.errorMessage = errorMessage;
