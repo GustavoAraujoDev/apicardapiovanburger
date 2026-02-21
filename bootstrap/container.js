@@ -21,6 +21,11 @@ eventDispatcher.register(
 );
 
 eventDispatcher.register(
+  "ProductStockAddedEvent",
+  auditHandler
+);
+
+eventDispatcher.register(
   "ProductCreatedEvent",
   auditHandler
 );
