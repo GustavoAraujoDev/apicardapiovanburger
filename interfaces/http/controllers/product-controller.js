@@ -68,7 +68,9 @@ class ProductController {
       }
 
       return res.status(500).json({
-        error: "Erro interno ao criar usuário"
+        error: "Erro interno ao criar usuário",
+        message: error.message,   // ✅ aqui
+        stack: error.stack  
       });
     }
   }
@@ -306,8 +308,11 @@ class ProductController {
       return res.status(200).json(users);
     } catch (error) {
       console.error("Erro ao listar usuários:", error);
-      return res.status(500).json({ error: "Erro interno do servidor", message: error.message,   // ✅ aqui
-      stack: error.stack   });
+      return res.status(500).json({ 
+        error: "Erro interno do servidor", 
+        message: error.message,   // ✅ aqui
+        stack: error.stack   
+      });
     }
   }
   // Métodos para update, delete e getById seguem o mesmo padrão.
