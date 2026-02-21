@@ -13,7 +13,7 @@ class ProductPolicy {
   static canDelete(user) {
     this.ensureAuthenticated(user);
 
-    if (user.role !== "admin") {
+    if (user.role !== "ADMIN") {
       throw new Error("Apenas ADMIN pode deletar produtos");
     }
   }
@@ -21,7 +21,7 @@ class ProductPolicy {
   static canUpdate(user) {
     this.ensureAuthenticated(user);
 
-    if (!["admin", "manager"].includes(user.role)) {
+    if (!["ADMIN", "EMPLOYEE"].includes(user.role)) {
       throw new Error("Sem permissão para atualizar produto");
     }
   }
