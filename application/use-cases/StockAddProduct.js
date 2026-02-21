@@ -25,16 +25,15 @@ class StockAddProduct {
       const product = new Product(productData);
 
       // 🔐 3️⃣ Autorização ABAC
-      ProductPolicy.canSell({
+      ProductPolicy.canAddStock({
         user,
-        product,
-        quantity
+        product
       });
 
       const oldStock = product.stock;
 
       // 🧠 4️⃣ Regra de domínio
-      product.(quantity);
+      product.addStock(quantity);
 
       const newData = product.stock;
 
