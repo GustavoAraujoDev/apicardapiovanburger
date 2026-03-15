@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { MongoDBContainer } = require("@testcontainers/mongodb");
 
-const ProductRepositoryMongo = require("../../infra/repositories/productRepositoryMongo");
+const { ProductRepositoryMongo } = require("../../infra/repositories/productRepositoryMongo");
 const { ProductModel } = require("../../infra/repositories/productRepositoryMongo");
 
 let container;
@@ -9,22 +9,29 @@ let productRepositoryMongo;
 
 describe("Product Repository - Integration", () => {
   beforeAll(async () => {
-    container = await new MongoDBContainer().start();
+    container = await new MongoDBContainer("mongo:7").start();
     const uri = container.getConnectionString();
-    await mongoose.connect(uri);
+
+    await mongoose.connect(uri, {
+      directConnection: true,
+    });
 
     productRepositoryMongo = new ProductRepositoryMongo();
-  });
+  }, 30000);
 
   afterEach(async () => {
-    // 🔥 Limpa coleção entre testes
-    await ProductModel.deleteMany({});
+    if (ProductModel) {
+      await ProductModel.deleteMany({});
+    }
   });
 
   afterAll(async () => {
     await mongoose.disconnect();
-    await container.stop();
-  });
+
+    if (container) {
+      await container.stop();
+    }
+  }, 30000);
 
   it("should create a product in the database", async () => {
     const productData = {
@@ -41,7 +48,6 @@ describe("Product Repository - Integration", () => {
 
     const product = await productRepositoryMongo.create(productData);
 
-    // 🔹 Validação da entidade retornada
     expect(product).toBeDefined();
     expect(product.id).toBeDefined();
     expect(typeof product.id).toBe("string");
@@ -49,7 +55,6 @@ describe("Product Repository - Integration", () => {
     expect(product.stock).toBe(10);
     expect(product.status).toBe("active");
 
-    // 🔹 Validação real no banco
     const saved = await ProductModel.findOne({ name: "Nike Air" }).lean();
 
     expect(saved).toBeTruthy();
