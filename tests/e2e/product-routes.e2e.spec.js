@@ -53,7 +53,7 @@ describe("Product Routes - E2E (Senior Pattern)", () => {
     // 3. Login: Note a correção da rota para /auth/login (padrão de mercado)
     // Se a sua rota for diferente, ajuste aqui.
     const loginRes = await request(app)
-      .post("/products/login") 
+      .post("/products/auth/login") 
       .send({
         email: testUser.email,
         password: testUser.passwordRaw
