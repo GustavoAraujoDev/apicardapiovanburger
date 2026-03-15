@@ -39,6 +39,9 @@ jobs:
       - name: Run Coverage
         run: npm test -- --coverage
 
+      - name: Verificar se o Docker está ativo
+        run: docker info
+
   # --------------------------------------
   # DEPLOY AUTOMÁTICO (opcional)
   # --------------------------------------
