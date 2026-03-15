@@ -32,6 +32,10 @@ describe("Product Routes - E2E (Senior Pattern)", () => {
   };
 
   beforeAll(async () => {
+
+    // 🚀 DEFINA A SECRET AQUI PARA O AMBIENTE DE TESTE
+    process.env.JWT_SECRET = "4f7961239f82637492104857362910475628193746502938475612";
+    
     // 1. Inicializa container isolado
     container = await new MongoDBContainer("mongo:7").start();
     await mongoose.connect(container.getConnectionString(), { directConnection: true });
