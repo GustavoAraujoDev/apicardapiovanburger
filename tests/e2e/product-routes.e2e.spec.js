@@ -2,7 +2,7 @@ const request = require("supertest");
 const mongoose = require("mongoose");
 const { MongoDBContainer } = require("@testcontainers/mongodb");
 const { v4: uuidv4 } = require("uuid");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 
 const app = require("../../app-test");
 // Importamos o UserModel para manipulação direta na infra de teste
