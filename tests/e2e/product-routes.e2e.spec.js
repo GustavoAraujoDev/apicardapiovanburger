@@ -46,7 +46,7 @@ describe("Product Routes - E2E (Senior Pattern)", () => {
         password: testUser.passwordRaw
       });
 
-    authToken = loginRes.body.token;
+    authToken = loginRes.body.accessToken;
   }, 40000); // Timeout maior para o Docker subir
 
   afterAll(async () => {
