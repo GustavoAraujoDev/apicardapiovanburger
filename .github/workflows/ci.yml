@@ -31,6 +31,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Check Docker
+        run: |
+              docker --version
+              docker info
+
       # ✔ Executa testes unitários, integração e E2E
       - name: Run Tests
         run: npm test
@@ -38,9 +43,6 @@ jobs:
       # ✔ Gera relatório de cobertura (pode integrar com SonarQube, CodeCov etc.)
       - name: Run Coverage
         run: npm test -- --coverage
-
-      - name: Verificar se o Docker está ativo
-        run: docker info
 
   # --------------------------------------
   # DEPLOY AUTOMÁTICO (opcional)
