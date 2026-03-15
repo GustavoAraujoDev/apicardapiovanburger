@@ -1,6 +1,5 @@
 const request = require("supertest");
 const mongoose = require("mongoose");
-const { MongoMemoryServer } = require("mongodb-memory-server");
 const { MongoDBContainer } = require("@testcontainers/mongodb");
 
 const app = require("../../app-test");
@@ -9,15 +8,21 @@ let container;
 
 describe("Product Routes - E2E", () => {
   beforeAll(async () => {
-  container = await new MongoDBContainer().start();
-  const uri = container.getConnectionString();
-  await mongoose.connect(uri);
-  });
+    container = await new MongoDBContainer("mongo:7").start();
+    const uri = container.getConnectionString();
+
+    await mongoose.connect(uri, {
+      directConnection: true,
+    });
+  }, 30000);
 
   afterAll(async () => {
     await mongoose.disconnect();
-    await container.stop();
-  });
+
+    if (container) {
+      await container.stop();
+    }
+  }, 30000);
 
   it("should create a product", async () => {
     const response = await request(app)
